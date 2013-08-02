@@ -1,0 +1,16 @@
+{
+	"name": "vette",
+	"version": "0.0.1",
+	"dependencies": {
+		"jquery": "latest",
+		"underscore": "latest"
+	},
+	"devDependencies": {
+
+	},
+	"ignore": [
+		".tmp/",
+		".jshintrc",
+		".jshintignore"
+	]
+}
