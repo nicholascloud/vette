@@ -1,19 +1,12 @@
 /*global define*/
-define(['underscore', './validation-set'], function (_, ValidationSet) {
+define(['jquery', 'underscore', 'events'], function ($, _, Events) {
   'use strict';
 
-  var api = {
-    createSet: function (container) {
-      return new ValidationSet(container);
-    },
+  var validators = {
     required: function (fieldName, message) {
       fieldName = fieldName || 'field';
       message = message || (fieldName + ' must have a value');
-      return function ($e) {
-        if ($e.val().length === 0) {
-          return message;
-        }
-      };
+      return this.minLength(1, fieldName, message);
     },
     match: function (regex, fieldName, message) {
       fieldName = fieldName || 'field';
@@ -143,8 +136,6 @@ define(['underscore', './validation-set'], function (_, ValidationSet) {
       };
     },
 
-    // composability
-
     /**
      * Allows you to provide a function [getValue] that will be responsible for
      * providing the actual data value to [rule], which is a validation rule.
@@ -191,13 +182,8 @@ define(['underscore', './validation-set'], function (_, ValidationSet) {
      * @param {...Function} rules
      * @returns {Function}
      */
-    compose: function (delimiter, rules) {
-      var sliceAt = 1;
-      if (_.isFunction(delimiter)) {
-        sliceAt = 0;
-        delimiter = '|';
-      }
-      rules = Array.prototype.slice.call(arguments, sliceAt);
+    compose: function (rules) {
+      rules = Array.prototype.slice.call(arguments, 0);
       return function ($e) {
         var violations = [];
         _.each(rules, function (rule) {
@@ -206,12 +192,99 @@ define(['underscore', './validation-set'], function (_, ValidationSet) {
             violations.push(violation);
           }
         });
-        if (violations.length) {
-          return violations.join(delimiter);
+        return violations;
+      };
+    },
+
+    /**
+     * Applies a precondition to the validation rule; if the precondition
+     * returns `true`, the rule will execute. If the precondition returns
+     * `false`, the rule will be be ignored.
+     * @param {Function} predicate
+     * @param {Function} rule
+     * @returns {Function}
+     */
+    precondition: function (predicate, rule) {
+      return function ($e) {
+        if (predicate($e)) {
+          return rule($e);
         }
       };
     }
   };
 
-  return Object.create(api);
+  var vette = {
+    add: function (selector, rule) {
+      if (!_.has(this._rules, selector)) {
+        this._rules[selector] = [];
+      }
+      this._rules[selector].push(rule);
+    },
+    remove: function (selector, rule) {
+      if (!_.has(this._rules, selector)) {
+        return;
+      }
+      this._rules[selector] = _.without(this._rules[selector], rule);
+    },
+    selectors: function () {
+      return _.keys(this._rules);
+    },
+    _evaluate: function ($el, deferred) {
+      this.trigger('evaluating', this.selectors());
+      var self = this;
+      /*
+       * violations = {
+       *   '[name=fullName]': ['field is required'], //1 violation
+       *   '[name=phone]': [] //no violations
+       * }
+       */
+      var violations = {};
+
+      _.each(this._rules, function (rules, selector) {
+        violations[selector] = [];
+
+        _.each(rules, function (rule) {
+          var violation = rule($el.find(selector));
+          if (violation) {
+            violations[selector].push(violation);
+          }
+        });
+
+        /*
+         * Some rules, like "compose", return an array of
+         * violations, so we need to flatten everything.
+         */
+        violations[selector] = _.flatten(violations[selector]);
+
+        if (violations[selector].length > 0) {
+          self.trigger('validation-failed', selector, violations[selector]);
+        }
+      });
+
+      var allViolations = _.values(violations);
+      var hasViolations = _.flatten(allViolations).length > 0;
+
+      if (!hasViolations) {
+        deferred.resolve();
+      } else {
+        deferred.reject(violations);
+      }
+
+      this.trigger('evaluated');
+    },
+    evaluate: function ($el) {
+      var deferred = new $.Deferred();
+      var asyncEvaluation = _.bind(this._evaluate, this, $el, deferred);
+      setTimeout(asyncEvaluation, 0);
+      return deferred.promise();
+    }
+  };
+
+  function Vette() {
+    var instance = Object.create(new Events());
+    instance._rules = {};
+    return _.extend(instance, vette);
+  }
+
+  return _.extend(Vette, validators);
 });

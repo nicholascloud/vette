@@ -2,27 +2,24 @@
 
 ### Use
 
-Set up a validation set for a given jQuery scope.
+Set up a set up vaidation rules by instantiating Vette.
 
 ```javascript
-var $form = $('form');
-var vetteSet = vette.createSet($form);
-// or, `vette.createSet('form')`
+var ruleset = new Vette();
 ```
 
 Add validators.
 
 ```javascript
-// selectors are scoped to $form
-vetteSet.add('[name=email]', vette.required());
-vetteSet.add('[name=password]', vette.required());
-vetteSet.add('[name=password]', vette.minLength(8));
+ruleset.add('[name=email]', Vette.required());
+ruleset.add('[name=password]', Vette.required());
+ruleset.add('[name=password]', Vette.minLength(8));
 ```
 
 Set up handlers.
 
 ```javascript
-vetteSet.on('evaluating', function () {
+ruleset.on('evaluating', function () {
   /*
    * Occurs before fields are validated. Useful
    * for resetting form state, hiding previous error
@@ -32,7 +29,7 @@ vetteSet.on('evaluating', function () {
   $form.find('.error-message').hide();
 });
 
-vetteSet.on('validation-failed', function (selector, violations) {
+ruleset.on('validation-failed', function (selector, violations) {
   /*
    * Occurs when validation fails for a given field (selector).
    * All violations will be in the `violations` array. If you
@@ -51,18 +48,19 @@ vetteSet.on('validation-failed', function (selector, violations) {
 On submit, evaluate fields.
 
 ```javascript
+var $form = $('form#myFields');
 $form.on('submit', function (e) {
   e.preventDefault();
-  var evaluation = vetteSet.evaluate();
+  var evaluation = ruleset.evaluate($form);
   evaluation.done(function () {
-    // submit $form.serialize()
+    // submit the form
   });
 });
 ```
 
 ### Advanced usage
 
-Create a custom "accessor" to fetch the value of a field.
+Create a custom "accessor" to fetch the value of a field, provide intelligent defaults, etc.
 
 ```javascript
 function defaultLevelValue($e) {
@@ -71,9 +69,22 @@ function defaultLevelValue($e) {
   return isNaN(value) ? 'none' : value;
 }
 
-vetteSet.add('[name=level]', vette.accessor(
+ruleset.add('[name=level]', Vette.accessor(
   defaultLevelValue,
-  vette.any(['none', 10, 15, 20])
+  Vette.any(['none', 10, 15, 20])
+));
+```
+
+Determine if a rule should even be evaluated by using a precondition. Useful if fields may or may not be present in your form at any given time.
+
+```javascript
+function isFieldPresent($e) {
+  return $e.length > 0;
+}
+
+ruleset.add('[name=password]', Vette.precondition(
+  isFieldPresent,
+  Vette.minLength(10) //only executes if isFieldPresent() returns true
 ));
 ```
 
