@@ -1,8 +1,115 @@
 /*global define*/
-define(['jquery', 'underscore', 'events'], function ($, _, Events) {
+define(['jquery', 'underscore', 'moment', 'events'], function ($, _, moment, Events) {
   'use strict';
 
-  var validators = {
+  function compare(inclusive) {
+    var api = Object.create({
+      btw: function (a, low, high) {
+        return this.gt(high, a) &&
+          this.lt(low, a);
+      }
+    });
+    if (inclusive) {
+      api.gt = function (a, b) { return a >= b; };
+      api.lt = function (a, b) { return a <= b; };
+    } else {
+      api.gt = function (a, b) { return a > b; };
+      api.lt = function (a, b) { return a < b; };
+    }
+    return api;
+  }
+
+  var numericValidators = {
+    numeric: function (fieldName, message) {
+      fieldName = fieldName || 'field';
+      message = message || (fieldName + ' must be numeric');
+      return function ($e) {
+        if (isNaN($e.val())) {
+          return message;
+        }
+      };
+    },
+    range: function (lower, upper, inclusive, fieldName, message) {
+      lower = Number(lower);
+      upper = Number(upper);
+      inclusive = inclusive || false;
+      fieldName = fieldName || 'field';
+      message = message || (fieldName + ' must be between ' + lower + ' and ' + upper);
+      return function ($e) {
+        var value = Number($e.val());
+        if (!compare(inclusive).btw(value, lower, upper)) {
+          return message;
+        }
+      };
+    },
+    gt: function (number, inclusive, fieldName, message) {
+      number = Number(number);
+      inclusive = inclusive || false;
+      fieldName = fieldName || 'field';
+      message = message || (fieldName + ' must be greater than ' + number);
+      return function ($e) {
+        var value = Number($e.val());
+        if (!compare(inclusive).gt(value, number)) {
+          return message;
+        }
+      };
+    },
+    gteq: function (number, fieldName, message) {
+      number = Number(number);
+      fieldName = fieldName || 'field';
+      message = message || (fieldName + ' must be greater than or equal to ' + number);
+      return this.gt(number, true, fieldName, message);
+    },
+    lt: function (number, inclusive, fieldName, message) {
+      number = Number(number);
+      inclusive = inclusive || false;
+      fieldName = fieldName || 'field';
+      message = message || (fieldName + ' must be less than ' + number);
+      return function ($e) {
+        var value = Number($e.val());
+        if (!compare(inclusive).lt(value, number)) {
+          return message;
+        }
+      };
+    },
+    lteq: function (number, fieldName, message) {
+      number = Number(number);
+      fieldName = fieldName || 'field';
+      message = message || (fieldName + ' must be less than or equal to ' + number);
+      return this.lt(number, true, fieldName, message);
+    }
+  };
+
+  var dateValidators = {
+    before: function (selector, inclusive, fieldName, message) {
+      selector = selector || '';
+      inclusive = inclusive || false;
+      fieldName = fieldName || 'field';
+      message = message || (fieldName + ' must occur before');
+      return function ($e, $root) {
+        var before = Date.parse($e.val());
+        var after = Date.parse($root.find(selector).val());
+        if (!compare(inclusive).lt(before, after)) {
+          return message;
+        }
+      };
+    },
+    after: function (selector, inclusive, fieldName, message) {
+      selector = selector || '';
+      inclusive = inclusive || false;
+      fieldName = fieldName || 'field';
+      message = message || (fieldName + ' must occur after');
+      return function ($e, $root) {
+        var after = Date.parse($e.val());
+        var before = Date.parse($root.find(selector).val());
+        if (!compare(inclusive).gt(after, before)) {
+          return message;
+        }
+      };
+    }
+  };
+
+  var genericValidators = {
     required: function (fieldName, message) {
       fieldName = fieldName || 'field';
       message = message || (fieldName + ' must have a value');
@@ -50,87 +157,12 @@ define(['jquery', 'underscore', 'events'], function ($, _, Events) {
         }
       };
     },
-    numeric: function (fieldName, message) {
+    same: function (selector, fieldName, message) {
       fieldName = fieldName || 'field';
-      message = message || (fieldName + ' must be numeric');
-      return function ($e) {
-        if (isNaN($e.val())) {
-          return message;
-        }
-      };
-    },
-    numericRange: function (lower, upper, fieldName, message) {
-      fieldName = fieldName || 'field';
-      lower = Number(lower);
-      upper = Number(upper);
-      message = message || (fieldName + ' must be between ' + lower + ' and ' + upper);
-      return function ($e) {
-        var value = $e.val();
-        if (isNaN(value)) {
-          return message;
-        }
-        value = Number(value);
-        if (value > upper || value < lower) {
-          return message;
-        }
-      };
-    },
-    gt: function (number, fieldName, message) {
-      fieldName = fieldName || 'field';
-      number = Number(number);
-      message = message || (fieldName + ' must be greater than ' + number);
-      return function ($e) {
-        var value = $e.val();
-        if (isNaN(value)) {
-          return message;
-        }
-        value = Number(value);
-        if (value <= number) {
-          return message;
-        }
-      };
-    },
-    gteq: function (number, fieldName, message) {
-      fieldName = fieldName || 'field';
-      number = Number(number);
-      message = message || (fieldName + ' must be greater than or equal to ' + number);
-      return function ($e) {
-        var value = $e.val();
-        if (isNaN(value)) {
-          return message;
-        }
-        value = Number(value);
-        if (value < number) {
-          return message;
-        }
-      };
-    },
-    lt: function (number, fieldName, message) {
-      fieldName = fieldName || 'field';
-      number = Number(number);
-      message = message || (fieldName + ' must be less than ' + number);
-      return function ($e) {
-        var value = $e.val();
-        if (isNaN(value)) {
-          return message;
-        }
-        value = Number(value);
-        if (value >= number) {
-          return message;
-        }
-      };
-    },
-    lteq: function (number, fieldName, message) {
-      fieldName = fieldName || 'field';
-      number = Number(number);
-      message = message || (fieldName + ' must be less than or equal to ' + number);
-      return function ($e) {
-        var value = $e.val();
-        if (isNaN(value)) {
-          return message;
-        }
-        value = Number(value);
-        if (value > number) {
+      selector = selector || '';
+      message = message || (fieldName + ' is not the same');
+      return function ($e, $root) {
+        if($e.val() !== $root.find(selector).val()) {
           return message;
         }
       };
@@ -153,8 +185,8 @@ define(['jquery', 'underscore', 'events'], function ($, _, Events) {
      * @returns {Function}
      */
     accessor: function (getValue, rule) {
-      return function ($e) {
-        var value = getValue($e);
+      return function ($e, $root) {
+        var value = getValue($e, $root);
         return rule({
           val: function () {
             return value;
@@ -184,10 +216,10 @@ define(['jquery', 'underscore', 'events'], function ($, _, Events) {
      */
     compose: function (rules) {
       rules = Array.prototype.slice.call(arguments, 0);
-      return function ($e) {
+      return function ($e, $root) {
         var violations = [];
         _.each(rules, function (rule) {
-          var violation = rule($e);
+          var violation = rule($e, $root);
           if (violation) {
             violations.push(violation);
           }
@@ -201,30 +233,54 @@ define(['jquery', 'underscore', 'events'], function ($, _, Events) {
      * returns `true`, the rule will execute. If the precondition returns
      * `false`, the rule will be be ignored.
      * @param {Function} predicate
-     * @param {Function} rule
+     * @param {...Function} rules
      * @returns {Function}
      */
-    precondition: function (predicate, rule) {
-      return function ($e) {
-        if (predicate($e)) {
-          return rule($e);
+    precondition: function (predicate, rules) {
+      rules = Array.prototype.slice.call(arguments, 1);
+      rules = this.compose.apply(this, rules);
+      return function ($e, $root) {
+        if (predicate($e, $root)) {
+          return rules($e, $root);
         }
       };
     }
   };
 
+  var validators = _.extend(
+    genericValidators,
+    dateValidators,
+    numericValidators
+  );
+
   var vette = {
-    add: function (selector, rule) {
+    /**
+     * Add one or more rules for the selector
+     * @param {String} selector
+     * @param {...Function} rules
+     */
+    add: function (selector, rules) {
+      rules = Array.prototype.slice.call(arguments, 1) || [];
       if (!_.has(this._rules, selector)) {
         this._rules[selector] = [];
       }
-      this._rules[selector].push(rule);
+      this._rules[selector] = _.union(this._rules[selector], rules);
     },
-    remove: function (selector, rule) {
+    /**
+     * Remove one or more rules for the selector
+     * @param {String} selector
+     * @param {...Function} rules
+     */
+    remove: function (selector, rules) {
       if (!_.has(this._rules, selector)) {
         return;
       }
-      this._rules[selector] = _.without(this._rules[selector], rule);
+      if (arguments.length === 1) {
+        delete this._rules[selector];
+        return;
+      }
+      rules = Array.prototype.slice.call(arguments, 1) || [];
+      this._rules[selector] = _.difference(this._rules[selector], rules);
     },
     selectors: function () {
       return _.keys(this._rules);
@@ -244,7 +300,7 @@ define(['jquery', 'underscore', 'events'], function ($, _, Events) {
         violations[selector] = [];
 
         _.each(rules, function (rule) {
-          var violation = rule($el.find(selector));
+          var violation = rule($el.find(selector), $el);
           if (violation) {
             violations[selector].push(violation);
           }
