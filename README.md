@@ -2,29 +2,6 @@
 
 ### Use
 
-Set up a set up validation rules by instantiating Vette.
-
-```javascript
-define(['vette'], function (Vette) {
-
-  var ruleset = new Vette();
-  // ...
-
-});
-```
-
-Add validators.
-
-```javascript
-ruleset.add('[name=email]', Vette.required());
-ruleset.add('[name=password]', Vette.minLength(10));
-ruleset.add('[name=password]', Vette.same('[name=verify-password']));
-
-// or
-
-ruleset.add('[name=password]', Vette.minLength(10), Vette.same('[name=verify-password']));
-```
-
 Given the following example form...
 
 ```html
@@ -49,7 +26,26 @@ Given the following example form...
 </form>
 ```
 
-...invoke validation when the user performs an action, like submitting a form...
+1. Set up a set up validation rules by instantiating Vette.
+
+```javascript
+define(['vette'], function (Vette) {
+
+  var ruleset = new Vette();
+  ruleset.add('[name=email]', Vette.required());
+  ruleset.add('[name=password]', Vette.minLength(10));
+  ruleset.add('[name=password]', Vette.same('[name=verify-password']));
+
+  // or
+
+  // ruleset.add('[name=password]',
+  //  Vette.minLength(10),
+  //  Vette.same('[name=verify-password']));
+
+});
+```
+
+2. Invoke validation when the user performs an action, like submitting a form.
 
 ```javascript
 var $form = $('form#create-user');
@@ -70,7 +66,7 @@ $form.on('submit', function (e) {
 });
 ```
 
-...set up handlers for Vette events...
+3. Set up handlers for Vette events.
 
 - `evaluating`: occurs before validation begins
 - `evaluated`: occurs after validation finishes
@@ -109,7 +105,7 @@ ruleset.on('evaluated', function () {
 });
 ```
 
-...profit!
+4. Profit!
 
 ### Available rules
 
