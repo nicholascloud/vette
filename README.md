@@ -2,10 +2,15 @@
 
 ### Use
 
-Set up a set up vaidation rules by instantiating Vette.
+Set up a set up validation rules by instantiating Vette.
 
 ```javascript
-var ruleset = new Vette();
+define(['vette'], function (Vette) {
+
+  var ruleset = new Vette();
+  // ...
+
+});
 ```
 
 Add validators.
@@ -13,10 +18,18 @@ Add validators.
 ```javascript
 ruleset.add('[name=email]', Vette.required());
 ruleset.add('[name=password]', Vette.required());
-ruleset.add('[name=password]', Vette.minLength(8));
+ruleset.add('[name=password]', Vette.minLength(10));
+
+// or
+
+ruleset.add('[name=password]', Vette.required(), Vette.minLength(10);
 ```
 
-Set up handlers.
+Set up handlers for Vette events:
+
+- `evaluating`: occurs before validation begins
+- `evaluated`: occurs after validation finishes
+- `validation-failed`: occurs when a specific rule generates a violation
 
 ```javascript
 ruleset.on('evaluating', function () {
@@ -27,6 +40,12 @@ ruleset.on('evaluating', function () {
    */
   $form.find('.invalid').removeClass('invalid');
   $form.find('.error-message').hide();
+});
+
+ruleset.on('evaluated', function () {
+  /*
+   * Validation is complete.
+   */
 });
 
 ruleset.on('validation-failed', function (selector, violations) {
@@ -45,20 +64,53 @@ ruleset.on('validation-failed', function (selector, violations) {
 });
 ```
 
-On submit, evaluate fields.
+Invoke validation when the user performs an action, like submitting a form.
 
 ```javascript
 var $form = $('form#myFields');
+
 $form.on('submit', function (e) {
   e.preventDefault();
+  /*
+   * `evaluate()` returns a promise that will be fulfilled if all
+   * validation rules pass.
+   */
   var evaluation = ruleset.evaluate($form);
   evaluation.done(function () {
     // submit the form
   });
+  evaluation.fail(function (allViolations) {
+    // show all violations in a big message
+  });
 });
 ```
 
-### Advanced usage
+### Available rules
+
+#### Generic rules
+
+- required
+- match(regex)
+- minLength(length)
+- maxLength(length)
+- any(options)
+- same(selector)
+
+#### Numeric rules
+
+- numeric()
+- range(lower, upper)
+- gt(number)
+- lt(number)
+- gteq(number)
+- lteq(number)
+
+#### Date rules
+
+- before(selector, inclusive)
+- after(selector, inclusive)
+
+#### Advanced rules
 
 Create a custom "accessor" to fetch the value of a field, provide intelligent defaults, etc.
 
@@ -86,6 +138,18 @@ ruleset.add('[name=password]', Vette.precondition(
   isFieldPresent,
   Vette.minLength(10) //only executes if isFieldPresent() returns true
 ));
+```
+
+Compose several rules that can be reused together.
+
+```javascript
+var composed = validators.compose(
+  validators.numeric(),
+  validators.gteq(10),
+  validators.lt(100)
+);
+set.add('[name=team1-score]', composed);
+set.add('[name=team2-score]', composed);
 ```
 
 ### TODO
