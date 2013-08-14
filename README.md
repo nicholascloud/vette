@@ -17,12 +17,12 @@ Add validators.
 
 ```javascript
 ruleset.add('[name=email]', Vette.required());
-ruleset.add('[name=password]', Vette.required());
 ruleset.add('[name=password]', Vette.minLength(10));
+ruleset.add('[name=password]', Vette.same('[name=verify-password']));
 
 // or
 
-ruleset.add('[name=password]', Vette.required(), Vette.minLength(10);
+ruleset.add('[name=password]', Vette.minLength(10), Vette.same('[name=verify-password']));
 ```
 
 Set up handlers for Vette events:
@@ -31,22 +31,30 @@ Set up handlers for Vette events:
 - `evaluated`: occurs after validation finishes
 - `validation-failed`: occurs when a specific rule generates a violation
 
-```javascript
-ruleset.on('evaluating', function () {
-  /*
-   * Occurs before fields are validated. Useful
-   * for resetting form state, hiding previous error
-   * messages, etc.
-   */
-  $form.find('.invalid').removeClass('invalid');
-  $form.find('.error-message').hide();
-});
+```html
+<form id="create-user">
+  <h1>Create User</h1>
+  <fieldset>
+    <div>
+      <label>email</label>
+      <input name="email" type="text" />
+      <p class="error-message"><!-- hidden --></p>
+    </div>
+    <div>
+      <label>password</label>
+      <input name="password" type="password" />
+      <input name="verify-password" type="password" />
+      <p class="error-message"><!-- hidden --></p>
+    </div>
+    <div>
+      <button>login</button>
+    </div>
+  </fieldset>
+</form>
+```
 
-ruleset.on('evaluated', function () {
-  /*
-   * Validation is complete.
-   */
-});
+```javascript
+var $form = $('form#create-user');
 
 ruleset.on('validation-failed', function (selector, violations) {
   /*
@@ -62,13 +70,27 @@ ruleset.on('validation-failed', function (selector, violations) {
     .text(firstViolation)
     .show();
 });
+
+ruleset.on('evaluating', function () {
+  /*
+   * Occurs before fields are validated. Useful
+   * for resetting form state, hiding previous error
+   * messages, etc.
+   */
+  $form.find('.invalid').removeClass('invalid');
+  $form.find('.error-message').hide();
+});
+
+ruleset.on('evaluated', function () {
+  /*
+   * Validation is complete.
+   */
+});
 ```
 
 Invoke validation when the user performs an action, like submitting a form.
 
 ```javascript
-var $form = $('form#myFields');
-
 $form.on('submit', function (e) {
   e.preventDefault();
   /*
@@ -77,7 +99,7 @@ $form.on('submit', function (e) {
    */
   var evaluation = ruleset.evaluate($form);
   evaluation.done(function () {
-    // submit the form
+    // submit the form via ajax or something
   });
   evaluation.fail(function (allViolations) {
     // show all violations in a big message
