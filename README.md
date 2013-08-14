@@ -25,11 +25,7 @@ ruleset.add('[name=password]', Vette.same('[name=verify-password']));
 ruleset.add('[name=password]', Vette.minLength(10), Vette.same('[name=verify-password']));
 ```
 
-Set up handlers for Vette events:
-
-- `evaluating`: occurs before validation begins
-- `evaluated`: occurs after validation finishes
-- `validation-failed`: occurs when a specific rule generates a violation
+Given the following example form...
 
 ```html
 <form id="create-user">
@@ -53,9 +49,34 @@ Set up handlers for Vette events:
 </form>
 ```
 
+...invoke validation when the user performs an action, like submitting a form...
+
 ```javascript
 var $form = $('form#create-user');
 
+$form.on('submit', function (e) {
+  e.preventDefault();
+  /*
+   * `evaluate()` returns a promise that will be fulfilled if all
+   * validation rules pass.
+   */
+  var evaluation = ruleset.evaluate($form);
+  evaluation.done(function () {
+    // submit the form via ajax or something
+  });
+  evaluation.fail(function (allViolations) {
+    // show all violations in a big message
+  });
+});
+```
+
+...set up handlers for Vette events...
+
+- `evaluating`: occurs before validation begins
+- `evaluated`: occurs after validation finishes
+- `validation-failed`: occurs when a specific rule generates a violation
+
+```javascript
 ruleset.on('validation-failed', function (selector, violations) {
   /*
    * Occurs when validation fails for a given field (selector).
@@ -88,24 +109,7 @@ ruleset.on('evaluated', function () {
 });
 ```
 
-Invoke validation when the user performs an action, like submitting a form.
-
-```javascript
-$form.on('submit', function (e) {
-  e.preventDefault();
-  /*
-   * `evaluate()` returns a promise that will be fulfilled if all
-   * validation rules pass.
-   */
-  var evaluation = ruleset.evaluate($form);
-  evaluation.done(function () {
-    // submit the form via ajax or something
-  });
-  evaluation.fail(function (allViolations) {
-    // show all violations in a big message
-  });
-});
-```
+...profit!
 
 ### Available rules
 
