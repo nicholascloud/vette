@@ -117,6 +117,7 @@ ruleset.on('evaluated', function () {
 - maxLength(length)
 - any(options)
 - same(selector)
+- different(selector)
 
 #### Numeric rules
 
