@@ -20,21 +20,19 @@ define(['jquery', 'underscore', 'moment', 'events'], function ($, _, moment, Eve
   }
 
   var numericValidators = {
-    numeric: function (fieldName, message) {
-      fieldName = fieldName || 'field';
-      message = message || (fieldName + ' must be numeric');
+    numeric: function (message) {
+      message = message || ('field must be numeric');
       return function ($e) {
         if (isNaN($e.val())) {
           return message;
         }
       };
     },
-    range: function (lower, upper, inclusive, fieldName, message) {
+    range: function (lower, upper, inclusive, message) {
       lower = Number(lower);
       upper = Number(upper);
       inclusive = inclusive || false;
-      fieldName = fieldName || 'field';
-      message = message || (fieldName + ' must be between ' + lower + ' and ' + upper);
+      message = message || ('field must be between ' + lower + ' and ' + upper);
       return function ($e) {
         var value = Number($e.val());
         if (!compare(inclusive).btw(value, lower, upper)) {
@@ -42,11 +40,10 @@ define(['jquery', 'underscore', 'moment', 'events'], function ($, _, moment, Eve
         }
       };
     },
-    gt: function (number, inclusive, fieldName, message) {
+    gt: function (number, inclusive, message) {
       number = Number(number);
       inclusive = inclusive || false;
-      fieldName = fieldName || 'field';
-      message = message || (fieldName + ' must be greater than ' + number);
+      message = message || ('field must be greater than ' + number);
       return function ($e) {
         var value = Number($e.val());
         if (!compare(inclusive).gt(value, number)) {
@@ -54,17 +51,15 @@ define(['jquery', 'underscore', 'moment', 'events'], function ($, _, moment, Eve
         }
       };
     },
-    gteq: function (number, fieldName, message) {
+    gteq: function (number, message) {
       number = Number(number);
-      fieldName = fieldName || 'field';
-      message = message || (fieldName + ' must be greater than or equal to ' + number);
-      return this.gt(number, true, fieldName, message);
+      message = message || ('field must be greater than or equal to ' + number);
+      return this.gt(number, true, message);
     },
-    lt: function (number, inclusive, fieldName, message) {
+    lt: function (number, inclusive, message) {
       number = Number(number);
       inclusive = inclusive || false;
-      fieldName = fieldName || 'field';
-      message = message || (fieldName + ' must be less than ' + number);
+      message = message || ('field must be less than ' + number);
       return function ($e) {
         var value = Number($e.val());
         if (!compare(inclusive).lt(value, number)) {
@@ -72,20 +67,18 @@ define(['jquery', 'underscore', 'moment', 'events'], function ($, _, moment, Eve
         }
       };
     },
-    lteq: function (number, fieldName, message) {
+    lteq: function (number, message) {
       number = Number(number);
-      fieldName = fieldName || 'field';
-      message = message || (fieldName + ' must be less than or equal to ' + number);
-      return this.lt(number, true, fieldName, message);
+      message = message || ('field must be less than or equal to ' + number);
+      return this.lt(number, true, message);
     }
   };
 
   var dateValidators = {
-    before: function (selector, inclusive, fieldName, message) {
+    before: function (selector, inclusive, message) {
       selector = selector || '';
       inclusive = inclusive || false;
-      fieldName = fieldName || 'field';
-      message = message || (fieldName + ' must occur before');
+      message = message || ('field must occur before');
       return function ($e, $root) {
         var before = Date.parse($e.val());
         var after = Date.parse($root.find(selector).val());
@@ -94,11 +87,10 @@ define(['jquery', 'underscore', 'moment', 'events'], function ($, _, moment, Eve
         }
       };
     },
-    after: function (selector, inclusive, fieldName, message) {
+    after: function (selector, inclusive, message) {
       selector = selector || '';
       inclusive = inclusive || false;
-      fieldName = fieldName || 'field';
-      message = message || (fieldName + ' must occur after');
+      message = message || ('field must occur after');
       return function ($e, $root) {
         var after = Date.parse($e.val());
         var before = Date.parse($root.find(selector).val());
@@ -110,43 +102,38 @@ define(['jquery', 'underscore', 'moment', 'events'], function ($, _, moment, Eve
   };
 
   var genericValidators = {
-    required: function (fieldName, message) {
-      fieldName = fieldName || 'field';
-      message = message || (fieldName + ' must have a value');
-      return this.minLength(1, fieldName, message);
+    required: function (message) {
+      message = message || ('field must have a value');
+      return this.minLength(1, message);
     },
-    match: function (regex, fieldName, message) {
-      fieldName = fieldName || 'field';
-      message = message || (fieldName + ' format is incorrect');
+    match: function (regex, message) {
+      message = message || ('field format is incorrect');
       return function ($e) {
         if (!regex.test($e.val())) {
           return message;
         }
       };
     },
-    minLength: function (length, fieldName, message) {
-      fieldName = fieldName || 'field';
+    minLength: function (length, message) {
       length = Number(length);
-      message = message || (fieldName + ' has a minimum length of ' + length);
+      message = message || ('field has a minimum length of ' + length);
       return function ($e) {
         if ($e.val().length < length) {
           return message;
         }
       };
     },
-    maxLength: function (length, fieldName, message) {
-      fieldName = fieldName || 'field';
+    maxLength: function (length, message) {
       length = Number(length);
-      message = message || (fieldName + ' has a maximum length of ' + length);
+      message = message || ('field has a maximum length of ' + length);
       return function ($e) {
         if ($e.val().length > length) {
           return message;
         }
       };
     },
-    any: function (options, fieldName, message) {
-      fieldName = fieldName || 'field';
-      message = message || (fieldName + ' is not a valid choice');
+    any: function (options, message) {
+      message = message || ('field is not a valid choice');
       options = options || [];
       return function ($e) {
         if (options.length === 0) {
@@ -157,12 +144,28 @@ define(['jquery', 'underscore', 'moment', 'events'], function ($, _, moment, Eve
         }
       };
     },
-    same: function (selector, fieldName, message) {
-      fieldName = fieldName || 'field';
+    same: function (selector, message) {
       selector = selector || '';
-      message = message || (fieldName + ' is not the same');
+      message = message || ('field is not the same');
       return function ($e, $root) {
-        if($e.val() !== $root.find(selector).val()) {
+        var $other = $root.find(selector);
+        var values = $other.map(function (index, element) {
+          return $(element).val();
+        });
+        if (_.difference(values, [$e.val()]).length > 0) {
+          return message;
+        }
+      };
+    },
+    different: function (selector, message) {
+      selector = selector || '';
+      message = message || 'field must be different';
+      return function ($e, $root) {
+        var $other = $root.find(selector);
+        var values = $other.map(function (index, element) {
+          return $(element).val();
+        });
+        if (_.contains(values, $e.val())) {
           return message;
         }
       };
