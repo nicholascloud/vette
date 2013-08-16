@@ -3,7 +3,7 @@ define(['jquery', 'vette'], function ($, Vette) {
   var assert = chai.assert;
   var $doc = $('#vette');
 
-  suite('#add()', function () {
+  suite('Vette#add()', function () {
     setup(function (done) {
       $doc.empty();
       done();

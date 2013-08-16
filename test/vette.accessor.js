@@ -3,7 +3,7 @@ define(['jquery', 'underscore', 'vette'], function ($, _, Vette) {
   var assert = chai.assert;
   var $doc = $('#vette');
 
-  suite('.accessor()', function () {
+  suite('Vette.accessor()', function () {
     var $field;
     setup(function (done) {
       $doc.empty();

@@ -68,7 +68,7 @@
       if (handlers.length === 0) {
         return;
       }
-      this._handlers = _.without(this._handlers, handlers);
+      this._handlers = _.difference(this._handlers, handlers);
     },
     clear: function () {
       this._handlers = [];

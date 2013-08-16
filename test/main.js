@@ -46,7 +46,14 @@ require([
   './vette_selectors',
   './vette_evaluate',
   // Vette events
-  './vette_events'
+  './vette_events',
+  // Events instance methods
+  './events.ctor',
+  './events.on',
+  './events.off',
+  './events.clear',
+  './events.trigger',
+  './events.triggerAsync'
 ], function () {
   'use strict';
   mocha.checkLeaks();
