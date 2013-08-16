@@ -192,15 +192,6 @@
     /**
      * Allows you to provide a function [getValue] that will be responsible for
      * providing the actual data value to [rule], which is a validation rule.
-     *
-     * var set = new ValidationSet(this._$el);
-     * var any = validators.any(['none', 'few', 'many']);
-     * var accessor = validators.accessor(function ($e) {
-     *   //for some reason the value is missing; default to 'none'
-     *   return $el.val() ? $el.val() : 'none';
-     * }, any);
-     * set.add('[name=howMany]', accessor);
-     *
      * @param {Function} getValue
      * @param {Function} rule
      * @returns {Function}
@@ -218,20 +209,6 @@
 
     /**
      * Composes multiple rules to be evaluated as a unit.
-     *
-     * var set = new ValidationSet(this._$el);
-     * var composed = validators.compose(
-     *   validators.numeric(),
-     *   validators.gteq(10),
-     *   validators.lt(100)
-     * );
-     * set.add('[name=score]', composed);
-     *
-     * The validation result will be returned as a single string, delimited by
-     * the pipe character (or whatever delimiter is passed as the first argument
-     * to `compose()`).
-     *
-     * @param {String} [delimiter]
      * @param {...Function} rules
      * @returns {Function}
      */
@@ -366,8 +343,3 @@
   return _.extend(Vette, validators);
 
 }));
-
-//define(['jquery', 'underscore', 'moment', './events'], function ($, _, moment, Events) {
-//  'use strict';
-//
-//});

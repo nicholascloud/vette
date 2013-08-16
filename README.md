@@ -60,7 +60,7 @@ Given the following example form...
 </form>
 ```
 
-1. Set up a set up validation rules by instantiating Vette.
+Add validation rules to an instance of Vette.
 
 ```javascript
 define(['vette'], function (Vette) {
@@ -79,7 +79,7 @@ define(['vette'], function (Vette) {
 });
 ```
 
-2. Invoke validation when the user performs an action, like submitting a form.
+Invoke validation when the user performs an action, like submitting a form.
 
 ```javascript
 var $form = $('form#create-user');
@@ -100,7 +100,7 @@ $form.on('submit', function (e) {
 });
 ```
 
-3. Set up handlers for Vette events.
+Set up handlers for Vette events.
 
 - `evaluating`: occurs before validation begins
 - `evaluated`: occurs after validation finishes
@@ -139,33 +139,33 @@ ruleset.on('evaluated', function () {
 });
 ```
 
-4. Profit!
+Profit!
 
 ### Available rules
 
 #### Generic rules
 
-- required
-- match(regex)
-- minLength(length)
-- maxLength(length)
-- any(options)
-- same(selector)
-- different(selector)
+- `required`: a field value is required (same as `minLength(1)`)
+- `match(regex)`: a field value matches a particular regular expression
+- `minLength(length)`: a string value must be a certain length
+- `maxLength(length)`: a string value cannot be greater than a certain length
+- `any(options)`: a field value may be any of an array of options (but must be one)
+- `same(selector)`: a field has the same value as another field(s)
+- `different(selector)`: a field has a different value as another field(s)
 
 #### Numeric rules
 
-- numeric()
-- range(lower, upper)
-- gt(number)
-- lt(number)
-- gteq(number)
-- lteq(number)
+- `numeric()`: a field value must be numeric
+- `range(lower, upper, inclusive)`: a field value must be within a given numeric range (not inclusive by default)
+- `gt(number)`: a field value must be greater than a given number
+- `lt(number)`: a field value must be less than a given number
+- `gteq(number)`: a field value must be greater to, or equal than, a given number
+- `lteq(number)`: a field value must be less than, or equal to, a given number
 
 #### Date rules
 
-- before(selector, inclusive)
-- after(selector, inclusive)
+- `before(selector, inclusive)`: a date value must occur before a date value in another field (not inclusive by default)
+- `after(selector, inclusive)`: a date value must occur after a date value in another field (not inclusive by default)
 
 #### Advanced rules
 
@@ -200,13 +200,13 @@ ruleset.add('[name=password]', Vette.precondition(
 Compose several rules that can be reused together.
 
 ```javascript
-var composed = validators.compose(
-  validators.numeric(),
-  validators.gteq(10),
-  validators.lt(100)
+var composed = Vette.compose(
+  Vette.numeric(),
+  Vette.gteq(10),
+  Vette.lt(100)
 );
-set.add('[name=team1-score]', composed);
-set.add('[name=team2-score]', composed);
+ruleset.add('[name=team1-score]', composed);
+ruleset.add('[name=team2-score]', composed);
 ```
 
 ### TODO
