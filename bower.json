@@ -2,12 +2,14 @@
 	"name": "vette",
 	"version": "0.0.1",
 	"dependencies": {
-		"jquery": "2.0.3",
-		"underscore": "1.5.1",
-    "requirejs": "2.1.8",
-    "moment": "2.1.0"
 	},
 	"devDependencies": {
+    "jquery": "latest",
+    "underscore": "latest",
+    "requirejs": "latest",
+    "moment": "latest",
+    "mocha": "latest",
+    "chai": "latest"
 	},
 	"ignore": [
 		".tmp/",

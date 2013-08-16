@@ -136,7 +136,7 @@
       length = Number(length);
       message = message || ('field has a minimum length of ' + length);
       return function ($e) {
-        if ($e.val().length < length) {
+        if ($e.val().trim().length < length) {
           return message;
         }
       };
@@ -187,8 +187,10 @@
           return message;
         }
       };
-    },
+    }
+  };
 
+  var advancedValidators = {
     /**
      * Allows you to provide a function [getValue] that will be responsible for
      * providing the actual data value to [rule], which is a validation rule.
@@ -215,14 +217,17 @@
     compose: function (rules) {
       rules = Array.prototype.slice.call(arguments, 0);
       return function ($e, $root) {
-        var violations = [];
+        var messages = [];
         _.each(rules, function (rule) {
           var violation = rule($e, $root);
           if (violation) {
-            violations.push(violation);
+            messages.push(violation);
           }
         });
-        return violations;
+        messages = _.flatten(messages);
+        if (messages.length) {
+          return messages;
+        }
       };
     },
 
@@ -248,7 +253,8 @@
   var validators = _.extend(
     genericValidators,
     dateValidators,
-    numericValidators
+    numericValidators,
+    advancedValidators
   );
 
   var vette = {
@@ -279,6 +285,9 @@
       }
       rules = Array.prototype.slice.call(arguments, 1) || [];
       this._rules[selector] = _.difference(this._rules[selector], rules);
+      if (this._rules[selector].length === 0) {
+        delete this._rules.selector;
+      }
     },
     selectors: function () {
       return _.keys(this._rules);
