@@ -4,10 +4,10 @@
 	"dependencies": {
 		"jquery": "2.0.3",
 		"underscore": "1.5.1",
-    "requirejs": "2.1.8"
+    "requirejs": "2.1.8",
+    "moment": "2.1.0"
 	},
 	"devDependencies": {
-
 	},
 	"ignore": [
 		".tmp/",

@@ -1,7 +1,25 @@
 /*global define*/
-define(['jquery', 'underscore', 'moment', 'events'], function ($, _, moment, Events) {
+(function (global, factory) {
   'use strict';
 
+  // AMD (require.js) module
+  if (typeof define === 'function' && define.amd) {
+    return define(['jquery', 'underscore', 'moment', './events'], function ($, _, moment, Events) {
+      return factory($, _, moment, Events, global);
+    });
+  }
+
+  // browser
+  global.Vette = factory(global.$, global._, global.moment, global.Events, global);
+
+}(this, function ($, _, moment, Events/*, global, undefined*/) {
+  'use strict';
+
+  /**
+   * Creates an object with comparison methods
+   * @param {Boolean} [inclusive] - determines if comparisons should be
+   * inclusive (e.g., `>=` vs `>`)
+   */
   function compare(inclusive) {
     var api = Object.create({
       btw: function (a, low, high) {
@@ -346,4 +364,10 @@ define(['jquery', 'underscore', 'moment', 'events'], function ($, _, moment, Eve
   }
 
   return _.extend(Vette, validators);
-});
+
+}));
+
+//define(['jquery', 'underscore', 'moment', './events'], function ($, _, moment, Events) {
+//  'use strict';
+//
+//});

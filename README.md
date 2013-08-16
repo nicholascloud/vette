@@ -1,5 +1,39 @@
 # Client validation library
 
+### Prerequisites
+
+- jQuery
+- underscore
+- moment
+
+### Installation
+
+With script tags:
+
+```html
+<!-- jQuery, underscore, and moment scripts -->
+
+<!-- creates window.Events -->
+<script src="bower_components/vette/events.js"></script>
+
+<!-- creates window.Vette -->
+<script src="bower_components/vette/vette.js"></script>
+```
+
+Or as a require.js AMD module:
+
+```javascript
+// main.js
+requirejs.config({
+  paths: {
+    "vette": "bower_components/vette/vette"
+  }
+});
+
+// your custom module
+define(["vette"], function (Vette) { });
+```
+
 ### Use
 
 Given the following example form...

@@ -1,5 +1,18 @@
 /*global define*/
-define(['underscore'], function (_) {
+(function (global, factory) {
+  'use strict';
+
+  // AMD (require.js) module
+  if (typeof define === 'function' && define.amd) {
+    return define(['underscore'], function (_) {
+      return factory(_);
+    });
+  }
+
+  // browser
+  global.Events = factory(global._);
+
+}(this, function (_/*, global, undefined*/) {
   'use strict';
 
   var DEFAULT_CONTEXT = {};
@@ -80,4 +93,5 @@ define(['underscore'], function (_) {
     instance._alwaysTriggerAsync = alwaysTriggerAsync;
     return instance;
   };
-});
+
+}));
