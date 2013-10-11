@@ -4,7 +4,7 @@ requirejs.config({
     'jquery': '../bower_components/jquery/jquery',
     'underscore': '../bower_components/underscore/underscore',
     'moment': '../bower_components/moment/moment',
-    'events': '../events',
+    'ventage': '../bower_components/ventage/ventage',
     'vette': '../vette'
   },
   shim: {
@@ -46,14 +46,7 @@ require([
   './vette_selectors',
   './vette_evaluate',
   // Vette events
-  './vette_events',
-  // Events instance methods
-  './events.ctor',
-  './events.on',
-  './events.off',
-  './events.clear',
-  './events.trigger',
-  './events.triggerAsync'
+  './vette_events'
 ], function () {
   'use strict';
   mocha.checkLeaks();

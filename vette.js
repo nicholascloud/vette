@@ -4,15 +4,15 @@
 
   // AMD (require.js) module
   if (typeof define === 'function' && define.amd) {
-    return define(['jquery', 'underscore', 'moment', './events'], function ($, _, moment, Events) {
-      return factory($, _, moment, Events, global);
+    return define(['jquery', 'underscore', 'moment', 'ventage'], function ($, _, moment, Ventage) {
+      return factory($, _, moment, Ventage, global);
     });
   }
 
   // browser
-  global.Vette = factory(global.$, global._, global.moment, global.Events, global);
+  global.Vette = factory(global.$, global._, global.moment, global.Ventage, global);
 
-}(this, function ($, _, moment, Events/*, global, undefined*/) {
+}(this, function ($, _, moment, Ventage/*, global, undefined*/) {
   'use strict';
 
   /**
@@ -344,7 +344,7 @@
   };
 
   function Vette() {
-    var instance = Object.create(new Events());
+    var instance = Object.create(new Ventage());
     instance._rules = {};
     return _.extend(instance, vette);
   }

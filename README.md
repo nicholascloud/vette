@@ -5,17 +5,17 @@
 - jQuery
 - underscore
 - moment
+- [ventage](https://github.com/a2labs/ventage)
 
 ### Installation
 
 With script tags:
 
 ```html
-<!-- jQuery, underscore, and moment scripts -->
-
-<!-- creates window.Events -->
-<script src="bower_components/vette/events.js"></script>
-
+<script src="bower_components/jquery/jquery.js"></script>
+<script src="bower_components/underscore/underscore.js"></script>
+<!-- creates window.Ventage -->
+<script src="bower_components/ventage/ventage.js"></script>
 <!-- creates window.Vette -->
 <script src="bower_components/vette/vette.js"></script>
 ```

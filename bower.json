@@ -1,10 +1,10 @@
 {
 	"name": "vette",
-	"version": "1.0.0",
+	"version": "1.0.1",
   "location": "git://github.com/a2labs/vette",
   "description": "extensible validation library for HTML forms",
   "keywords": ["validation", "forms"],
-  "license": "LICENSE.md",
+  "license": "LICENSE",
   "authors": ["Nicholas Cloud <ncloud@appendto.com>"],
   "repository": {
     "type": "git",
@@ -16,7 +16,8 @@
     "jquery": "latest",
     "underscore": "latest",
     "requirejs": "latest",
-    "moment": "latest"
+    "moment": "latest",
+    "ventage": "latest"
 	},
 	"devDependencies": {
     "mocha": "latest",
