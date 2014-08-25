@@ -213,4 +213,3 @@ ruleset.add('[name=team2-score]', composed);
 
 1. Configure validation rules declaratively
 2. Auto-wire handlers
-3. Backbone.js integration
