@@ -1,5 +1,5 @@
 'use strict';
-var compare = require('./compare');
+var compare = require('../compare');
 
 module.exports = function before (selector, inclusive, message) {
   selector = selector || '';
