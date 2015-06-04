@@ -1,3 +1,5 @@
+# NOTE: This is the 1.0 documentation and has not been updated for 2.0.
+
 # Client validation library
 
 ### Prerequisites

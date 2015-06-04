@@ -1,0 +1,30 @@
+{
+  "name": "vette",
+  "version": "2.0.0-alpha",
+  "description": "validation",
+  "main": "src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "eventemitter3": "^1.1.0",
+    "lodash": "^3.9.3",
+    "q": "^1.4.1"
+  },
+  "devDependencies": {
+    "chai": "^2.3.0",
+    "jquery": "^2.1.4",
+    "mocha": "^2.2.5"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nicholascloud/vette.git"
+  },
+  "author": "Nicholas Cloud <me@nicholascloud.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nicholascloud/vette/issues"
+  },
+  "homepage": "https://github.com/nicholascloud/vette"
+}
