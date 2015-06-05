@@ -2,6 +2,13 @@
 var _ = require('lodash');
 var Q = require('q');
 var EventEmitter = require('eventemitter3');
+
+var each = require('./each');
+var flatten = require('./flatten');
+var keys = require('./keys');
+var values = require('./values');
+var extend = require('./extend');
+
 var adapters = require('./adapters');
 var validators = require('./validators');
 
@@ -13,10 +20,10 @@ var vette = {
    */
   add: function (selector, rules) {
     rules = Array.prototype.slice.call(arguments, 1) || [];
-    if (!_.has(this.rules, selector)) {
+    if (!this.rules.hasOwnProperty(selector)) {
       this.rules[selector] = [];
     }
-    this.rules[selector] = _.union(this.rules[selector], rules);
+    this.rules[selector] = this.rules[selector].concat(rules);
   },
 
   /**
@@ -25,7 +32,7 @@ var vette = {
    * @param {...Function} rules
    */
   remove: function (selector, rules) {
-    if (!_.has(this.rules, selector)) {
+    if (!this.rules.hasOwnProperty(selector)) {
       return;
     }
     if (arguments.length === 1) {
@@ -40,7 +47,7 @@ var vette = {
   },
 
   selectors: function () {
-    return _.keys(this.rules);
+    return keys(this.rules);
   },
 
   _evaluate: function (adapter, deferred) {
@@ -54,10 +61,10 @@ var vette = {
      */
     var violations = {};
 
-    _.each(this.rules, function (rules, selector) {
+    each(this.rules, function (rules, selector) {
       violations[selector] = [];
 
-      _.each(rules, function (rule) {
+      each(rules, function (rule) {
         var violation = rule(adapter.find(selector), adapter);
         if (violation) {
           violations[selector].push(violation);
@@ -68,15 +75,15 @@ var vette = {
        * Some rules, like "compose", return an array of
        * violations, so we need to flatten everything.
        */
-      violations[selector] = _.flatten(violations[selector]);
+      violations[selector] = flatten(violations[selector]);
 
       if (violations[selector].length > 0) {
         self.emit('validation-failed', selector, violations[selector]);
       }
     });
 
-    var allViolations = _.values(violations);
-    var hasViolations = _.flatten(allViolations).length > 0;
+    var allViolations = values(violations);
+    var hasViolations = flatten(allViolations).length > 0;
 
     if (!hasViolations) {
       deferred.resolve();
@@ -104,7 +111,7 @@ function Vette(adapterName) {
   var instance = Object.create(new EventEmitter());
   instance.adapter = adapters[adapterName];
   instance.rules = {};
-  return _.extend(instance, vette);
+  return extend(instance, vette);
 }
 
-module.exports = _.extend(Vette, validators);
+module.exports = extend(Vette, validators);

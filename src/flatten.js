@@ -1,4 +1,11 @@
 'use strict';
+
+/**
+ * Flattens a mutli-dimensional array
+ * @param {Array} collection
+ * @param {Boolean} deep
+ * @returns {Array}
+ */
 module.exports = function flatten (collection, deep) {
   deep = deep || false;
   var results = [];
