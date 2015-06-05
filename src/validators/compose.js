@@ -1,5 +1,6 @@
 'use strict';
-var _ = require('lodash');
+var each = require('../each');
+var flatten = require('../flatten');
 
 /**
  * Composes multiple rules to be evaluated as a unit.
@@ -10,13 +11,13 @@ module.exports = function compose (rules) {
   rules = Array.prototype.slice.call(arguments, 0);
   return function (adapter, rootAdapter) {
     var messages = [];
-    _.each(rules, function (rule) {
+    each(rules, function (rule) {
       var violation = rule(adapter, rootAdapter);
       if (violation) {
         messages.push(violation);
       }
     });
-    messages = _.flatten(messages);
+    messages = flatten(messages);
     if (messages.length) {
       return messages;
     }
