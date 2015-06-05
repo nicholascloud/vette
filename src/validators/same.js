@@ -1,10 +1,12 @@
 'use strict';
+var sameValueZero = require('../same-value-zero');
+
 module.exports = function same (selector, message) {
   selector = selector || '';
-  message = message || ('field is not the same');
+  message = message || 'value is not the same';
   return function (adapter, rootAdapter) {
     var otherAdapter = rootAdapter.find(selector);
-    if (adapter.value() !== otherAdapter.value()) {
+    if (!sameValueZero(adapter.value(), otherAdapter.value())) {
       return message;
     }
   };
