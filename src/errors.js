@@ -6,7 +6,8 @@
  * @constructor
  */
 function MissingArgumentError(argumentName) {
-  this.name = 'MissingArgument';
+  argumentName = argumentName || 'unspecified';
+  this.name = 'MissingArgumentError';
   this.message = 'missing argument: ' + argumentName;
   this.argumentName = argumentName;
   this.stack = (new Error()).stack;
