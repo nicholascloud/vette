@@ -2,5 +2,6 @@
 
 module.exports = {
   hash: require('./hash'),
-  jquery: require('./jquery')
+  jquery: require('./jquery'),
+  dom: require('./dom')
 };
