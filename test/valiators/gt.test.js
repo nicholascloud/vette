@@ -78,7 +78,7 @@ describe('gt', function () {
     done();
   });
 
-  it('returns undefined if value is equal than number and rule is inclusive', function (done) {
+  it('returns undefined if value is equal to the number and rule is inclusive', function (done) {
     var obj = {
       foo: 1
     };
