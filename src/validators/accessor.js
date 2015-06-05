@@ -1,5 +1,5 @@
 'use strict';
-var errors = require('../errors');
+var MissingArgumentError = require('../errors').MissingArgumentError;
 
 /**
  * Allows you to provide a function [getValue] that will be responsible for
@@ -10,10 +10,10 @@ var errors = require('../errors');
  */
 module.exports = function accessor (getValue, rule) {
   if (!getValue) {
-    throw new errors.MissingArgumentError('getValue');
+    throw new MissingArgumentError('getValue');
   }
   if (!rule) {
-    throw new errors.MissingArgumentError('rule');
+    throw new MissingArgumentError('rule');
   }
   return function (adapter, rootAdapter) {
     var value = getValue(adapter, rootAdapter);
