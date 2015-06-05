@@ -1,4 +1,10 @@
 'use strict';
+
+/**
+ * Creates an API to compare numbers
+ * @param {Boolean} inclusive
+ * @returns {Object}
+ */
 module.exports = function compare(inclusive) {
   var api = Object.create({
     btw: function (a, low, high) {
