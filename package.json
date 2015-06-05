@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "eventemitter3": "^1.1.0",
-    "lodash": "^3.9.3",
     "q": "^1.4.1"
   },
   "devDependencies": {

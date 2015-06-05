@@ -1,5 +1,4 @@
 'use strict';
-var _ = require('lodash');
 var Q = require('q');
 var EventEmitter = require('eventemitter3');
 
@@ -8,6 +7,7 @@ var flatten = require('./flatten');
 var keys = require('./keys');
 var values = require('./values');
 var extend = require('./extend');
+var difference = require('./difference');
 
 var adapters = require('./adapters');
 var validators = require('./validators');
@@ -40,7 +40,7 @@ var vette = {
       return;
     }
     rules = Array.prototype.slice.call(arguments, 1) || [];
-    this.rules[selector] = _.difference(this.rules[selector], rules);
+    this.rules[selector] = difference(this.rules[selector], rules);
     if (this.rules[selector].length === 0) {
       delete this.rules.selector;
     }

@@ -2,6 +2,11 @@
 var empty = require('./empty');
 var contains = require('./contains');
 
+/**
+ * Gets the difference among collections
+ * @param collections
+ * @returns {Array}
+ */
 module.exports = function difference (collections) {
   collections = Array.prototype.slice.call(arguments, 0);
 

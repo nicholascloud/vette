@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Returns an object's keys
+ * Returns an object's own keys
  * @param {Object} object
  * @returns {Array}
  */
