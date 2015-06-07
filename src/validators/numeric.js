@@ -1,8 +1,10 @@
 'use strict';
+var _ = require('../../lib/lodash');
+
 module.exports = function numeric (message) {
-  message = message || ('field must be numeric');
+  message = message || 'value must be numeric';
   return function (adapter) {
-    if (isNaN(adapter.value())) {
+    if (!_.isNumber(adapter.value())) {
       return message;
     }
   };

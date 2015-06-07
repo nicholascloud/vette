@@ -13,6 +13,7 @@
   "devDependencies": {
     "chai": "^2.3.0",
     "jquery": "^2.1.4",
+    "lodash-cli": "^3.9.3",
     "mocha": "^2.2.5"
   },
   "scripts": {},
