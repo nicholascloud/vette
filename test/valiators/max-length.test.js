@@ -43,10 +43,10 @@ describe('maxLength', function () {
   it('returns undefined if rule succeeds', function (done) {
     var adapter = {
       value: function () {
-        return 'foo bar baz';
+        return '1234567890';
       }
     };
-    var rule = maxLengthValidator(11);
+    var rule = maxLengthValidator(10);
     var actual = rule(adapter);
     expect(actual).to.be.undefined;
     done();
