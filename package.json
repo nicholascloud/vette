@@ -1,6 +1,6 @@
 {
   "name": "vette",
-  "version": "2.0.2-alpha",
+  "version": "2.0.3",
   "description": "validation",
   "main": "src/index.js",
   "directories": {
