@@ -1,38 +1,16 @@
-# Client validation library
+# Vette 2.x
+
+*NOTE* Version 1.x was built with RequireJS. This is no longer the case. Vette 2.x+ will only support CommonJS loaders like Browserify.
 
 ### Prerequisites
 
-- jQuery
-- underscore
-- moment
-- [ventage](https://github.com/a2labs/ventage)
+- Node.js + npm
 
 ### Installation
 
-With script tags:
-
-```html
-<script src="bower_components/jquery/jquery.js"></script>
-<script src="bower_components/underscore/underscore.js"></script>
-<!-- creates window.Ventage -->
-<script src="bower_components/ventage/ventage.js"></script>
-<!-- creates window.Vette -->
-<script src="bower_components/vette/vette.js"></script>
-```
-
-Or as a require.js AMD module:
-
-```javascript
-// main.js
-requirejs.config({
-  paths: {
-    "vette": "bower_components/vette/vette"
-  }
-});
-
-// your custom module
-define(["vette"], function (Vette) { });
-```
+1. Run `npm install` in the project root to fetch dependencies.
+2. Reference the Vette module in your own scripts.
+3. Compile with a CommonJS module loader like Browserify. All dependencies should be included. 
 
 ### Use
 
@@ -65,7 +43,7 @@ Add validation rules to an instance of Vette.
 ```javascript
 define(['vette'], function (Vette) {
 
-  var ruleset = new Vette();
+  var ruleset = new Vette('jquery');
   ruleset.add('[name=email]', Vette.required());
   ruleset.add('[name=password]', Vette.minLength(10));
   ruleset.add('[name=password]', Vette.same('[name=verify-password']));
@@ -73,8 +51,8 @@ define(['vette'], function (Vette) {
   // or
 
   // ruleset.add('[name=password]',
-  //  Vette.minLength(10),
-  //  Vette.same('[name=verify-password']));
+  //   Vette.minLength(10),
+  //   Vette.same('[name=verify-password']));
 
 });
 ```
@@ -141,7 +119,7 @@ ruleset.on('evaluated', function () {
 
 Profit!
 
-### Available rules
+### Available validator rules
 
 #### Generic rules
 
@@ -174,26 +152,26 @@ Create a custom "accessor" to fetch the value of a field, provide intelligent de
 ```javascript
 function defaultLevelValue($e) {
   // generate the value for [name=level]
-  var value = Number($e.val());
-  return isNaN(value) ? 'none' : value;
+  var value = $e.val();
+  return !value ? 'none' : value;
 }
 
 ruleset.add('[name=level]', Vette.accessor(
   defaultLevelValue,
-  Vette.any(['none', 10, 15, 20])
+  Vette.any(['none', 'novice', 'journeyman', 'master'])
 ));
 ```
 
-Determine if a rule should even be evaluated by using a precondition. Useful if fields may or may not be present in your form at any given time.
+Determine if a rule should even be evaluated by using a precondition.
 
 ```javascript
-function isFieldPresent($e) {
-  return $e.length > 0;
+function isNotEmpty(value) {
+  return !!value;
 }
 
-ruleset.add('[name=password]', Vette.precondition(
-  isFieldPresent,
-  Vette.minLength(10) //only executes if isFieldPresent() returns true
+ruleset.add('[name=middleName]', Vette.precondition(
+  isNotEmpty,
+  Vette.minLength(2) //only executes if isNotEmpty() returns true
 ));
 ```
 
@@ -209,7 +187,86 @@ ruleset.add('[name=team1-score]', composed);
 ruleset.add('[name=team2-score]', composed);
 ```
 
-### TODO
+### A word about adapters
 
-1. Configure validation rules declaratively
-2. Auto-wire handlers
+Vette was originally coupled tightly to jQuery, but as it is useful in other contexts (besides just validating HTML form fields) it became obvious that the code would need to change a bit. When a Vette instance is created, an optional adapter name may be passed to the constructor.
+
+```javascript
+var ruleset = new Vette('jquery');
+```
+
+Adapters wrap object passed to `vette.evaluate()` and are used to find other nested objects or values within the evaluated object.
+
+Consider an HTML `<form>` element. It may have many `<input>` elements as children, and each of these `<input>` elements has some value. So an adapter wraps the `<form>` element, can find other child elements by selector, and retrieve the values from those child elements.
+
+Or consider a plain JavaScript object. It has named properties which themselves may be objects. An adapter can navigate the object tree, find properties, and return their values.
+
+The `hashAdapter` shows the simple interface all adapters must possess. It encapsulates a single object and may look up properties on that object, or return values from those properties.
+
+```javascript
+function hashAdapter (object) {
+  return {
+    find: function (property) {
+      return hashAdapter(object[property]);
+    },
+    value: function () {
+      return object;
+    }
+  }
+}
+```
+
+Internally, Vette uses the hash adapter to navigate the properties of an object.
+
+```javascript
+var foo = {
+  bar: {
+    baz: 'ding ding ding!'
+  }
+};
+
+// Vette internals
+var rootAdapter = hashAdapter(foo);
+var barAdapter = hashAdapter.find('bar'); // {baz: 'ding ding ding!'}
+var bazAdapter = barAdapter.find('baz'); // 'ding ding ding!'
+var oopsAdapter = bazAdapter.find('doesNotExist'); // undefined
+```
+
+#### Pre-defined adapters
+
+There are three pre-defined adapters in Vette.
+
+1. `hash` - fetches properties and values from an object literal (default adapter)
+2. `dom` - fetches elements and values in an HTML page using `Element.querySelector()` and `Element.value` syntax
+3. `jquery` - fetches elements and values in an HTML page using `$Element.find()` and `$Element.val()` syntax. 
+
+When a Vette instance is create it defaults to using the `hash` adapter. If another adapter name is passed to the constructor function, the instance will use that adapter instead. Objects passed to `vette.evaluate()` will be wrapped with the configured adapter.
+
+#### Custom adapters
+
+A custom adapter:
+
+1. is a function that accepts a single argument--the object passed to `vette.evaluate()`--and returns
+2. an object with two methods:
+    1. `find(identifier)` - returns some value wrapped in the same kind of adapter, and
+    2. `value()` - returns the actual value passed to the adapter function
+
+(The `src/adapters/*.js` files are good reference implementations.)
+
+To add a custom adapter to Vette, assign it as a property to Vette's adapters hash before creating a Vette instance:
+
+```javascript
+Vette.adapters.myAdapter = function (myObject) {
+  // ...
+};
+
+var myObject = {/*...*/};
+var ruleset = new Vette('myAdapter');
+ruleset.add(/*...*/);
+ruleset.evaluate(myObject);
+```
+
+## TODO:
+
+- demos
+- enhance `hashAdapter` with [l33teral](https://github.com/nicholascloud/l33teral)
