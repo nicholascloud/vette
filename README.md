@@ -188,3 +188,83 @@ var composed = Vette.compose(
 ruleset.add('[name=team1-score]', composed);
 ruleset.add('[name=team2-score]', composed);
 ```
+
+### A word about adapters
+
+Vette was originally coupled tightly to jQuery, but as it is useful in other contexts (besides just validating HTML form fields) it became obvious that the code would need to change a bit. When a Vette instance is created, an optional adapter name may be passed to the constructor.
+
+```javascript
+var ruleset = new Vette('jquery');
+```
+
+Adapters wrap object passed to `vette.evaluate()` and are used to find other nested objects or values within the evaluated object.
+
+Consider an HTML `<form>` element. It may have many `<input>` elements as children, and each of these `<input>` elements has some value. So an adapter wraps the `<form>` element, can find other child elements by selector, and retrieve the values from those child elements.
+
+Or consider a plain JavaScript object. It has named properties which themselves may be objects. An adapter can navigate the object tree, find properties, and return their values.
+
+The `hashAdapter` shows the simple interface all adapters must possess. It encapsulates a single object and may look up properties on that object, or return values from those properties.
+
+```javascript
+function hashAdapter (object) {
+  return {
+    find: function (property) {
+      return hashAdapter(object[property]);
+    },
+    value: function () {
+      return object;
+    }
+  }
+}
+```
+
+Internally, Vette uses the hash adapter to navigate the properties of an object.
+
+```javascript
+var foo = {
+  bar: {
+    baz: 'ding ding ding!'
+  }
+};
+
+// Vette internals
+var rootAdapter = hashAdapter(foo);
+var barAdapter = hashAdapter.find('bar'); // {baz: 'ding ding ding!'}
+var bazAdapter = barAdapter.find('baz'); // 'ding ding ding!'
+var oopsAdapter = bazAdapter.find('doesNotExist'); // undefined
+```
+
+#### Pre-defined adapters
+
+There are three pre-defined adapters in Vette.
+
+1. `hash` - fetches properties and values from an object literal (default adapter)
+2. `dom` - fetches elements and values in an HTML page using `Element.querySelector()` and `Element.value` syntax
+3. `jquery` - fetches elements and values in an HTML page using `$Element.find()` and `$Element.val()` syntax. 
+
+When a Vette instance is create it defaults to using the `hash` adapter. If another adapter name is passed to the constructor function, the instance will use that adapter instead. Objects passed to `vette.evaluate()` will be wrapped with the configured adapter.
+
+#### Custom adapters
+
+A custom adapter:
+
+1. is a function that accepts a single argument--the object passed to `vette.evaluate()`--and returns
+2. an object with two methods:
+    1. `find(identifier:String)` - returns some value wrapped in the same kind of adapter, and
+    2. `value()` - returns the actual value passed to the adapter function
+
+(The `src/adapters/*.js` files are good reference implementations.)
+
+To add a custom adapter to Vette, assign it as a property to Vette's adapters hash before creating a Vette instance:
+
+```javascript
+Vette.adapters.myAdapter = function (myObject) {
+  // ...
+};
+
+var myObject = {/*...*/};
+var ruleset = new Vette('myAdapter');
+ruleset.add(/*...*/);
+ruleset.evaluate(myObject);
+```
+
