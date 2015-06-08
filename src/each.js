@@ -13,7 +13,7 @@ function arrayEach(collection, iteratee) {
 function objectEach(object, iteratee) {
   for (var key in object) {
     if (object.hasOwnProperty(key)) {
-      iteratee(key, object[key], object);
+      iteratee(object[key], key, object);
     }
   }
 }

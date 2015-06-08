@@ -42,7 +42,7 @@ var vette = {
     rules = Array.prototype.slice.call(arguments, 1) || [];
     this.rules[selector] = difference(this.rules[selector], rules);
     if (this.rules[selector].length === 0) {
-      delete this.rules.selector;
+      delete this.rules[selector];
     }
   },
 
