@@ -5,13 +5,22 @@ var preconditionValidator = require('../../src/validators').precondition;
 
 describe('precondition', function () {
 
+  var mockAdapter;
+
+  beforeEach(function (done) {
+    mockAdapter = {
+      value: function () {}
+    };
+    done();
+  });
+
   it('will not run a rule if the precondition fails', function (done) {
     var actual = false;
     var rule = preconditionValidator(
       function () { return false; },
       function () { actual = true; }
     );
-    rule();
+    rule(mockAdapter);
     expect(actual).to.be.false;
     done();
   });
@@ -22,7 +31,7 @@ describe('precondition', function () {
       function () { return true; },
       function () { actual = true; }
     );
-    rule();
+    rule(mockAdapter);
     expect(actual).to.be.true;
     done();
   });
@@ -35,7 +44,7 @@ describe('precondition', function () {
       function () { actual += 1; },
       function () { actual += 1; }
     );
-    rule();
+    rule(mockAdapter);
     expect(actual).to.equal(3);
     done();
   });
@@ -48,7 +57,7 @@ describe('precondition', function () {
       function () { return expectedMessage1; },
       function () { return expectedMessage2; }
     );
-    var actualMessages = rule();
+    var actualMessages = rule(mockAdapter);
     expect(actualMessages).to.be.an.array;
     expect(actualMessages).to.have.members([
       expectedMessage1,
@@ -63,8 +72,26 @@ describe('precondition', function () {
       function () {},
       function () {}
     );
-    var actual = rule();
+    var actual = rule(mockAdapter);
     expect(actual).to.be.undefined;
+    done();
+  });
+
+  it('will pass the adapter value to the precondition', function (done) {
+    var valuePassed = false;
+    var expectedValue = 1;
+    mockAdapter.value = function () {
+      return expectedValue;
+    };
+    var rule = preconditionValidator(
+      function (actualValue) {
+        valuePassed = (actualValue === expectedValue);
+        return true;
+      },
+      function () {}
+    );
+    rule(mockAdapter);
+    expect(valuePassed).to.be.true;
     done();
   });
 
