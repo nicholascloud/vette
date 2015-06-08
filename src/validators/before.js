@@ -1,4 +1,5 @@
 'use strict';
+var isNumber = require('../is-number');
 var compare = require('../compare');
 
 module.exports = function before (selector, inclusive, message) {
@@ -7,11 +8,11 @@ module.exports = function before (selector, inclusive, message) {
   message = message || 'date must occur before';
   return function (adapter, rootAdapter) {
     var before = Date.parse(adapter.value());
-    if (isNaN(before)) {
+    if (!isNumber(before)) {
       return 'before value is not a date';
     }
     var after = Date.parse(rootAdapter.find(selector).value());
-    if (isNaN(after)) {
+    if (!isNumber(after)) {
       return 'after value is not a date';
     }
     if (!compare(inclusive).lt(before, after)) {

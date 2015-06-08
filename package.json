@@ -16,7 +16,9 @@
     "lodash-cli": "^3.9.3",
     "mocha": "^2.2.5"
   },
-  "scripts": {},
+  "scripts": {
+    "install": "bash npm-install.sh"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/nicholascloud/vette.git"

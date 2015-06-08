@@ -1,10 +1,10 @@
 'use strict';
-var _ = require('../../lib/lodash');
+var isNumber = require('../is-number');
 
 module.exports = function numeric (message) {
   message = message || 'value must be numeric';
   return function (adapter) {
-    if (!_.isNumber(adapter.value())) {
+    if (!isNumber(adapter.value())) {
       return message;
     }
   };
