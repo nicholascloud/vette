@@ -1,6 +1,6 @@
 {
   "name": "vette",
-  "version": "2.0.1-alpha",
+  "version": "2.0.2-alpha",
   "description": "validation",
   "main": "src/index.js",
   "directories": {
@@ -12,12 +12,10 @@
   },
   "devDependencies": {
     "chai": "^2.3.0",
-    "jquery": "^2.1.4",
-    "lodash-cli": "^3.9.3",
     "mocha": "^2.2.5"
   },
   "scripts": {
-    "install": "bash npm-install.sh"
+    "test": "./node_modules/mocha/bin/_mocha --recursive --ui bdd ./test"
   },
   "repository": {
     "type": "git",
