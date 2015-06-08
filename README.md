@@ -1,8 +1,6 @@
 # Vette 2.x
 
-*NOTE* Version 1.x was built with RequireJS. This is no longer the case. Vette 2.x+ will only support CommonJS loaders Browserify.
-
-# Client validation library
+*NOTE* Version 1.x was built with RequireJS. This is no longer the case. Vette 2.x+ will only support CommonJS loaders like Browserify.
 
 ### Prerequisites
 
@@ -250,7 +248,7 @@ A custom adapter:
 
 1. is a function that accepts a single argument--the object passed to `vette.evaluate()`--and returns
 2. an object with two methods:
-    1. `find(identifier:String)` - returns some value wrapped in the same kind of adapter, and
+    1. `find(identifier)` - returns some value wrapped in the same kind of adapter, and
     2. `value()` - returns the actual value passed to the adapter function
 
 (The `src/adapters/*.js` files are good reference implementations.)
@@ -268,3 +266,7 @@ ruleset.add(/*...*/);
 ruleset.evaluate(myObject);
 ```
 
+## TODO:
+
+- demos
+- enhance `hashAdapter` with [l33teral](https://github.com/nicholascloud/l33teral)
