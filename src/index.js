@@ -105,13 +105,15 @@ var vette = {
 };
 
 function Vette(adapterName) {
-  if (!adapters.hasOwnProperty(adapterName || '')) {
+  if (!Vette.adapters[adapterName || '']) {
     adapterName = 'hash';
   }
   var instance = Object.create(new EventEmitter());
-  instance.adapter = adapters[adapterName];
+  instance.adapter = Vette.adapters[adapterName];
   instance.rules = {};
   return extend(instance, vette);
 }
+
+Vette.adapters = Object.create(adapters);
 
 module.exports = extend(Vette, validators);
