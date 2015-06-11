@@ -7,7 +7,7 @@ var anyValidator = require('../../src/validators').any;
 describe('any', function () {
 
   it('returns default message on failure', function (done) {
-    var expectedMessage = 'field is not a valid choice';
+    var expectedMessage = 'value is not a valid choice';
     var obj = {
       foo: 'foo'
     };
@@ -33,7 +33,7 @@ describe('any', function () {
   });
 
   it('returns message if options are empty', function (done) {
-    var expectedMessage = 'field is not a valid choice';
+    var expectedMessage = 'value is not a valid choice';
     var obj = {
       foo: 'foo'
     };
@@ -46,7 +46,7 @@ describe('any', function () {
   });
 
   it('returns message if options are falsy', function (done) {
-    var expectedMessage = 'field is not a valid choice';
+    var expectedMessage = 'value is not a valid choice';
     var obj = {
       foo: 'foo'
     };
@@ -59,7 +59,7 @@ describe('any', function () {
   });
 
   it('returns message if value is not in options', function (done) {
-    var expectedMessage = 'field is not a valid choice';
+    var expectedMessage = 'value is not a valid choice';
     var obj = {
       foo: 'foo'
     };

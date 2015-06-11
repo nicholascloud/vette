@@ -26,6 +26,7 @@ module.exports = {
   any: require('./any'),
   same: require('./same'),
   different: require('./different'),
+  each: require('./each'),
 
   // advanced
   accessor: require('./accessor'),

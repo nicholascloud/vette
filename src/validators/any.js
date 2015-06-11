@@ -2,7 +2,7 @@
 var contains = require('../contains');
 
 module.exports = function any (options, message) {
-  message = message || 'field is not a valid choice';
+  message = message || 'value is not a valid choice';
   options = options || [];
   return function (adapter) {
     if (options.length === 0) {
