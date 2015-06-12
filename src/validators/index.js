@@ -1,12 +1,15 @@
 'use strict';
 module.exports = {
-  //numeric validators
+  // numeric validators
   numeric: require('./numeric'),
   range: require('./range'),
   gt: require('./gt'),
   gteq: require('./gteq'),
   lt: require('./lt'),
   lteq: require('./lteq'),
+
+  // collection validators
+  nodupe: require('./nodupe'),
 
   // boolean validators
   bool: require('./bool'),
