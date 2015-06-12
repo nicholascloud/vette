@@ -6,6 +6,21 @@ var nodupeValidator = require('../../src/validators').nodupe;
 
 describe('nodupe', function () {
 
+  it('returns an error if value not an array', function (done) {
+    var expectedMessage = 'value is not an array';
+    var adapter = {
+      value: function () {
+        return true;
+      },
+      find: function () {}
+    };
+    var rule = nodupeValidator();
+    var err = rule(adapter);
+    expect(err).to.be.an.instanceOf(Error);
+    expect(err.message).to.equal(expectedMessage);
+    done();
+  });
+
   it('returns an error with default message if duplicates are found', function (done) {
     var expectedMessage = 'value contains duplicates at indices: 0 and 3';
     var adapter = {

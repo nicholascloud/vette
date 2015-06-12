@@ -6,7 +6,7 @@ module.exports = function nodupe (message) {
   return function (adapter) {
     var value = adapter.value();
     if (!Array.isArray(value)) {
-      return;
+      return new TypeError('value is not an array');
     }
     if (value.length === 0) {
       return;

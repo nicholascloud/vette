@@ -13,7 +13,7 @@ module.exports = function gt (number, inclusive, message) {
   return function (adapter) {
     var value = Number(adapter.value());
     if (!isNumber(value)) {
-      return new ValidatorError('value must be numeric');
+      return new TypeError('value must be numeric');
     }
     if (!compare(inclusive).gt(value, number)) {
       return new ValidatorError(message);
