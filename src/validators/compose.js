@@ -10,16 +10,16 @@ var flatten = require('../flatten');
 module.exports = function compose (rules) {
   rules = Array.prototype.slice.call(arguments, 0);
   return function (adapter, rootAdapter) {
-    var messages = [];
+    var errors = [];
     each(rules, function (rule) {
       var violation = rule(adapter, rootAdapter);
       if (violation) {
-        messages.push(violation);
+        errors.push(violation);
       }
     });
-    messages = flatten(messages);
-    if (messages.length) {
-      return messages;
+    errors = flatten(errors);
+    if (errors.length) {
+      return errors;
     }
   };
 };

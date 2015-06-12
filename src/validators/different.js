@@ -1,5 +1,6 @@
 'use strict';
 var MissingArgumentError = require('../errors').MissingArgumentError;
+var ValidatorError = require('../errors').ValidatorError;
 
 module.exports = function different (selector, message) {
   if (!selector) {
@@ -9,7 +10,7 @@ module.exports = function different (selector, message) {
   return function (adapter, rootAdapter) {
     var otherAdapter = rootAdapter.find(selector);
     if (adapter.value() === otherAdapter.value()) {
-      return message;
+      return new ValidatorError(message);
     }
   };
 };

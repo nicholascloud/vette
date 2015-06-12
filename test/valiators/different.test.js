@@ -24,8 +24,9 @@ describe('different', function () {
     var rootAdapter = hashAdapter(obj);
     var fooAdapter = rootAdapter.find('foo');
     var rule = differentValidator('bar');
-    var actualMessage = rule(fooAdapter, rootAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(fooAdapter, rootAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -38,8 +39,9 @@ describe('different', function () {
     var rootAdapter = hashAdapter(obj);
     var fooAdapter = rootAdapter.find('foo');
     var rule = differentValidator('bar', expectedMessage);
-    var actualMessage = rule(fooAdapter, rootAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(fooAdapter, rootAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -51,8 +53,8 @@ describe('different', function () {
     var rootAdapter = hashAdapter(obj);
     var fooAdapter = rootAdapter.find('foo');
     var rule = differentValidator('bar');
-    var actualMessage = rule(fooAdapter, rootAdapter);
-    expect(actualMessage).to.be.undefined;
+    var error = rule(fooAdapter, rootAdapter);
+    expect(error).to.be.undefined;
     done();
   });
 });
