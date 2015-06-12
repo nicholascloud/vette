@@ -14,8 +14,9 @@ describe('numeric', function () {
       }
     };
     var rule = numericValidator();
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(adapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -27,8 +28,9 @@ describe('numeric', function () {
       }
     };
     var rule = numericValidator(expectedMessage);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(adapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -39,8 +41,8 @@ describe('numeric', function () {
       }
     };
     var rule = numericValidator();
-    var actual = rule(adapter);
-    expect(actual).to.be.undefined;
+    var error = rule(adapter);
+    expect(error).to.be.undefined;
     done();
   });
 });
