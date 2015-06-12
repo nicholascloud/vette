@@ -1,6 +1,7 @@
 'use strict';
 var isNumber = require('../is-number');
 var compare = require('../compare');
+var ValidatorError = require('../errors').ValidatorError;
 
 module.exports = function before (selector, inclusive, message) {
   selector = selector || '';

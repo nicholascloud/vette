@@ -1,6 +1,6 @@
 'use strict';
 var contains = require('../contains');
-var ValidatorError = require('./validator-error');
+var ValidatorError = require('../errors').ValidatorError;
 
 module.exports = function any (options, message) {
   message = message || 'value is not a valid choice';
