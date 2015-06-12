@@ -89,4 +89,24 @@ describe('each', function () {
     expect(error).to.be.instanceOf(Error);
     done();
   });
+
+  it('adds target index to a generated error', function (done) {
+    var adapter = {
+      value: function () {
+        return [1, 2, 3, 4];
+      },
+      find: function () {}
+    };
+    var eachRule = function (adapter) {
+      if (adapter.value() >= 3) {
+        return new Error('fail');
+      }
+    };
+    var rule = eachValidator(eachRule);
+    var error = rule(adapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.targetIndex).to.equal(2);
+    done();
+  });
+
 });
