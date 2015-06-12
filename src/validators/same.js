@@ -1,5 +1,6 @@
 'use strict';
 var sameValueZero = require('../same-value-zero');
+var ValidatorError = require('../errors').ValidatorError;
 
 module.exports = function same (selector, message) {
   selector = selector || '';
@@ -7,7 +8,7 @@ module.exports = function same (selector, message) {
   return function (adapter, rootAdapter) {
     var otherAdapter = rootAdapter.find(selector);
     if (!sameValueZero(adapter.value(), otherAdapter.value())) {
-      return message;
+      return new ValidatorError(message);
     }
   };
 };

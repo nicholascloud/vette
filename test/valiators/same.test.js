@@ -7,14 +7,16 @@ var sameValidator = require('../../src/validators').same;
 describe('same', function () {
 
   it('should return default message on failure', function (done) {
+    var expectedMessage = 'value is not the same';
     var obj = {
       foo: 'foo',
       bar: 'bar'
     };
     var rule = sameValidator('bar');
     var adapter = hashAdapter(obj);
-    var message = rule(adapter.find('foo'), adapter);
-    expect(message).to.not.be.empty;
+    var error = rule(adapter.find('foo'), adapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -26,8 +28,9 @@ describe('same', function () {
     var expectedMessage = 'expected message';
     var rule = sameValidator('bar', expectedMessage);
     var adapter = hashAdapter(obj);
-    var actualMessage = rule(adapter.find('foo'), adapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(adapter.find('foo'), adapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -38,8 +41,8 @@ describe('same', function () {
     };
     var rule = sameValidator('bar');
     var adapter = hashAdapter(obj);
-    var message = rule(adapter.find('foo'), adapter);
-    expect(message).to.be.undefined;
+    var error = rule(adapter.find('foo'), adapter);
+    expect(error).to.be.undefined;
     done();
   });
 });
