@@ -1,6 +1,7 @@
 'use strict';
 var isNumber = require('../is-number');
 var compare = require('../compare');
+var ValidatorError = require('../errors').ValidatorError;
 
 module.exports = function lt (number, inclusive, message) {
   number = Number(number);
@@ -12,10 +13,10 @@ module.exports = function lt (number, inclusive, message) {
   return function (adapter) {
     var value = Number(adapter.value());
     if (!isNumber(value)) {
-      return 'value must be numeric';
+      return new ValidatorError('value must be numeric');
     }
     if (!compare(inclusive).lt(value, number)) {
-      return message;
+      return new ValidatorError(message);
     }
   };
 };

@@ -22,8 +22,9 @@ describe('gteq', function () {
     var rootAdapter = hashAdapter(obj);
     var fooAdapter = rootAdapter.find('foo');
     var rule = gteqValidator(1);
-    var actualMessage = rule(fooAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(fooAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -35,8 +36,9 @@ describe('gteq', function () {
     var rootAdapter = hashAdapter(obj);
     var fooAdapter = rootAdapter.find('foo');
     var rule = gteqValidator(1);
-    var actualMessage = rule(fooAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(fooAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 

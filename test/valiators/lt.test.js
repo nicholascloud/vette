@@ -22,8 +22,9 @@ describe('lt', function () {
     var rootAdapter = hashAdapter(obj);
     var fooAdapter = rootAdapter.find('foo');
     var rule = ltValidator(1);
-    var actualMessage = rule(fooAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(fooAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -35,8 +36,9 @@ describe('lt', function () {
     var rootAdapter = hashAdapter(obj);
     var fooAdapter = rootAdapter.find('foo');
     var rule = ltValidator(0);
-    var actualMessage = rule(fooAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(fooAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -48,8 +50,9 @@ describe('lt', function () {
     var rootAdapter = hashAdapter(obj);
     var fooAdapter = rootAdapter.find('foo');
     var rule = ltValidator(1, false);
-    var actualMessage = rule(fooAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(fooAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -61,8 +64,9 @@ describe('lt', function () {
     var rootAdapter = hashAdapter(obj);
     var fooAdapter = rootAdapter.find('foo');
     var rule = ltValidator(0, null, expectedMessage);
-    var actualMessage = rule(fooAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(fooAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -73,8 +77,8 @@ describe('lt', function () {
     var rootAdapter = hashAdapter(obj);
     var fooAdapter = rootAdapter.find('foo');
     var rule = ltValidator(2);
-    var actualMessage = rule(fooAdapter);
-    expect(actualMessage).to.be.undefined;
+    var error = rule(fooAdapter);
+    expect(error).to.be.undefined;
     done();
   });
 
@@ -85,8 +89,8 @@ describe('lt', function () {
     var rootAdapter = hashAdapter(obj);
     var fooAdapter = rootAdapter.find('foo');
     var rule = ltValidator(1, true);
-    var actualMessage = rule(fooAdapter);
-    expect(actualMessage).to.be.undefined;
+    var error = rule(fooAdapter);
+    expect(error).to.be.undefined;
     done();
   });
 });

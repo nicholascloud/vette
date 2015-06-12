@@ -4,7 +4,7 @@ var expect = require('chai').expect;
 var hashAdapter = require('../../src/adapters').hash;
 var lteqValidator = require('../../src/validators').lteq;
 
-describe('gteq', function () {
+describe('lteq', function () {
 
   it('throws an error if number is not numeric', function (done) {
     var fn = function () {
@@ -22,8 +22,9 @@ describe('gteq', function () {
     var rootAdapter = hashAdapter(obj);
     var fooAdapter = rootAdapter.find('foo');
     var rule = lteqValidator(1);
-    var actualMessage = rule(fooAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(fooAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -35,8 +36,9 @@ describe('gteq', function () {
     var rootAdapter = hashAdapter(obj);
     var fooAdapter = rootAdapter.find('foo');
     var rule = lteqValidator(0);
-    var actualMessage = rule(fooAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(fooAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -47,8 +49,8 @@ describe('gteq', function () {
     var rootAdapter = hashAdapter(obj);
     var fooAdapter = rootAdapter.find('foo');
     var rule = lteqValidator(1);
-    var actualMessage = rule(fooAdapter);
-    expect(actualMessage).to.be.undefined;
+    var error = rule(fooAdapter);
+    expect(error).to.be.undefined;
     done();
   });
 
@@ -59,8 +61,8 @@ describe('gteq', function () {
     var rootAdapter = hashAdapter(obj);
     var fooAdapter = rootAdapter.find('foo');
     var rule = lteqValidator(2);
-    var actualMessage = rule(fooAdapter);
-    expect(actualMessage).to.be.undefined;
+    var error = rule(fooAdapter);
+    expect(error).to.be.undefined;
     done();
   });
 });
