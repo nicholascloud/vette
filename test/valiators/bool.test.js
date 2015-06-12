@@ -13,8 +13,8 @@ describe('bool', function () {
     var rootAdapter = hashAdapter(obj);
     var boolAdapter = rootAdapter.find('foo');
     var rule = boolValidator();
-    var actualMessage = rule(boolAdapter, rootAdapter);
-    expect(actualMessage).to.be.undefined;
+    var error = rule(boolAdapter, rootAdapter);
+    expect(error).to.be.undefined;
     done();
   });
 
@@ -25,8 +25,8 @@ describe('bool', function () {
     var rootAdapter = hashAdapter(obj);
     var boolAdapter = rootAdapter.find('foo');
     var rule = boolValidator();
-    var actualMessage = rule(boolAdapter, rootAdapter);
-    expect(actualMessage).to.be.undefined;
+    var error = rule(boolAdapter, rootAdapter);
+    expect(error).to.be.undefined;
     done();
   });
 
@@ -38,8 +38,9 @@ describe('bool', function () {
     var rootAdapter = hashAdapter(obj);
     var boolAdapter = rootAdapter.find('foo');
     var rule = boolValidator();
-    var actualMessage = rule(boolAdapter, rootAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(boolAdapter, rootAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -51,8 +52,9 @@ describe('bool', function () {
     var rootAdapter = hashAdapter(obj);
     var boolAdapter = rootAdapter.find('foo');
     var rule = boolValidator(expectedMessage);
-    var actualMessage = rule(boolAdapter, rootAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(boolAdapter, rootAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 });
