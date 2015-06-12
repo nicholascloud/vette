@@ -89,14 +89,15 @@ ruleset.on('validation-failed', function (selector, violations) {
   /*
    * Occurs when validation fails for a given field (selector).
    * All violations will be in the `violations` array. If you
-   * want to display the *first* violation that occured, just
-   * grab the first element of the array.
+   * want to display the *first* violation that occurred, just
+   * grab the first element of the array. Note that all violations
+   * are instances of Error or a subtype of Error.
    */
   var firstViolation = violations[0];
   $form.find(selector)
     .addClass('invalid')
     .siblings('.error-message')
-    .text(firstViolation)
+    .text(firstViolation.message)
     .show();
 });
 
@@ -123,31 +124,35 @@ Profit!
 
 #### Generic rules
 
-- `required`: a field value is required (same as `minLength(1)`)
-- `match(regex)`: a field value matches a particular regular expression
+- `required`: a value is required (same as `minLength(1)`)
+- `match(regex)`: a value matches a particular regular expression
 - `minLength(length)`: a string value must be a certain length
 - `maxLength(length)`: a string value cannot be greater than a certain length
-- `any(options)`: a field value may be any of an array of options (but must be one)
-- `same(selector)`: a field has the same value as another field(s)
-- `different(selector)`: a field has a different value as another field(s)
+- `any(options)`: a value may be any value in an array of options (but must be one)
+- `same(selector)`: a value has the same value as another
+- `different(selector)`: a value is different than another
 
 #### Numeric rules
 
-- `numeric()`: a field value must be numeric
-- `range(lower, upper, inclusive)`: a field value must be within a given numeric range (not inclusive by default)
-- `gt(number)`: a field value must be greater than a given number
-- `lt(number)`: a field value must be less than a given number
-- `gteq(number)`: a field value must be greater to, or equal than, a given number
-- `lteq(number)`: a field value must be less than, or equal to, a given number
+- `numeric()`: a value must be numeric
+- `range(lower, upper, inclusive)`: a value must be within a given numeric range (not inclusive by default)
+- `gt(number)`: a value must be greater than a given number
+- `lt(number)`: a value must be less than a given number
+- `gteq(number)`: a value must be greater to, or equal than, a given number
+- `lteq(number)`: a value must be less than, or equal to, a given number
+
+#### Collection rules
+
+- `nodupe()`: no duplicate values may be present in an array value
 
 #### Date rules
 
-- `before(selector, inclusive)`: a date value must occur before a date value in another field (not inclusive by default)
-- `after(selector, inclusive)`: a date value must occur after a date value in another field (not inclusive by default)
+- `before(selector, inclusive)`: a date value must occur before another date value (not inclusive by default)
+- `after(selector, inclusive)`: a date value must occur after another date value (not inclusive by default)
 
 #### Advanced rules
 
-Create a custom "accessor" to fetch the value of a field, provide intelligent defaults, etc.
+Create a custom "accessor" to fetch values, provide intelligent defaults, etc.
 
 ```javascript
 function defaultLevelValue($e) {
