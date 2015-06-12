@@ -1,4 +1,5 @@
 'use strict';
+var ValidatorError = require('../errors').ValidatorError;
 
 module.exports = function each (rule, message) {
   return function (adapter) {
@@ -13,9 +14,12 @@ module.exports = function each (rule, message) {
         value: function () { return value; },
         find: function () {}
       };
-      var ruleMessage = rule(adapterFacade, adapter);
-      if (ruleMessage) {
-        return message || ruleMessage;
+      var ruleError = rule(adapterFacade, adapter);
+      if (ruleError) {
+        if (message) {
+          return new ValidatorError(message);
+        }
+        return ruleError;
       }
       index += 1;
     }

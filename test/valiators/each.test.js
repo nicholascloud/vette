@@ -14,11 +14,12 @@ describe('each', function () {
       find: function () {}
     };
     var eachRule = function (/*adapter*/) {
-      return expectedMessage;
+      return new Error(expectedMessage);
     };
     var rule = eachValidator(eachRule);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(adapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -31,11 +32,12 @@ describe('each', function () {
       find: function () {}
     };
     var eachRule = function (/*adapter*/) {
-      return 'this message will not be used';
+      return new Error('this message will not be used');
     };
     var rule = eachValidator(eachRule, expectedMessage);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(adapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -48,8 +50,8 @@ describe('each', function () {
     };
     var eachRule = function (/*adapter*/) {};
     var rule = eachValidator(eachRule);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.be.undefined;
+    var error = rule(adapter);
+    expect(error).to.be.undefined;
     done();
   });
 
