@@ -10,14 +10,14 @@ module.exports = function before (selector, inclusive, message) {
   return function (adapter, rootAdapter) {
     var before = Date.parse(adapter.value());
     if (!isNumber(before)) {
-      return 'before value is not a date';
+      return new TypeError('before value is not a date');
     }
     var after = Date.parse(rootAdapter.find(selector).value());
     if (!isNumber(after)) {
-      return 'after value is not a date';
+      return new TypeError('after value is not a date');
     }
     if (!compare(inclusive).lt(before, after)) {
-      return message;
+      return new ValidatorError(message);
     }
   };
 };

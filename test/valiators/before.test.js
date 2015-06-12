@@ -15,8 +15,9 @@ describe('before', function () {
     var rule = beforeValidator('after');
     var rootAdapter = hashAdapter(obj);
     var beforeAdapter = rootAdapter.find('before');
-    var actualMessage = rule(beforeAdapter, rootAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(beforeAdapter, rootAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -29,8 +30,9 @@ describe('before', function () {
     var rule = beforeValidator('after');
     var rootAdapter = hashAdapter(obj);
     var beforeAdapter = rootAdapter.find('before');
-    var actualMessage = rule(beforeAdapter, rootAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(beforeAdapter, rootAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -43,8 +45,9 @@ describe('before', function () {
     var rule = beforeValidator('after');
     var rootAdapter = hashAdapter(obj);
     var beforeAdapter = rootAdapter.find('before');
-    var actualMessage = rule(beforeAdapter, rootAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(beforeAdapter, rootAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -56,8 +59,8 @@ describe('before', function () {
     var rule = beforeValidator('after');
     var rootAdapter = hashAdapter(obj);
     var beforeAdapter = rootAdapter.find('before');
-    var actualMessage = rule(beforeAdapter, rootAdapter);
-    expect(actualMessage).to.be.undefined;
+    var error = rule(beforeAdapter, rootAdapter);
+    expect(error).to.be.undefined;
     done();
   });
 
@@ -70,8 +73,9 @@ describe('before', function () {
     var rule = beforeValidator('after', false, expectedMessage);
     var rootAdapter = hashAdapter(obj);
     var beforeAdapter = rootAdapter.find('before');
-    var actualMessage = rule(beforeAdapter, rootAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(beforeAdapter, rootAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -84,8 +88,9 @@ describe('before', function () {
     var rule = beforeValidator('after');
     var rootAdapter = hashAdapter(obj);
     var beforeAdapter = rootAdapter.find('before');
-    var actualMessage = rule(beforeAdapter, rootAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(beforeAdapter, rootAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -97,8 +102,8 @@ describe('before', function () {
     var rule = beforeValidator('after', true);
     var rootAdapter = hashAdapter(obj);
     var beforeAdapter = rootAdapter.find('before');
-    var actualMessage = rule(beforeAdapter, rootAdapter);
-    expect(actualMessage).to.be.undefined;
+    var error = rule(beforeAdapter, rootAdapter);
+    expect(error).to.be.undefined;
     done();
   });
 
