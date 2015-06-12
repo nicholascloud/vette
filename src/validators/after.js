@@ -1,6 +1,7 @@
 'use strict';
 var isNumber = require('../is-number');
 var compare = require('../compare');
+var ValidatorError = require('./validator-error');
 
 module.exports = function after (selector, inclusive, message) {
   selector = selector || '';
@@ -9,14 +10,14 @@ module.exports = function after (selector, inclusive, message) {
   return function (adapter, rootAdapter) {
     var after = Date.parse(adapter.value());
     if (!isNumber(after)) {
-      return 'after value is not a date';
+      return new ValidatorError('after value is not a date');
     }
     var before = Date.parse(rootAdapter.find(selector).value());
     if (!isNumber(before)) {
-      return 'before value is not a date';
+      return new ValidatorError('before value is not a date');
     }
     if (!compare(inclusive).gt(after, before)) {
-      return message;
+      return new ValidatorError(message);
     }
   };
 };
