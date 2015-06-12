@@ -13,8 +13,9 @@ describe('required', function () {
       }
     };
     var rule = requiredValidator();
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(adapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -26,8 +27,9 @@ describe('required', function () {
       }
     };
     var rule = requiredValidator(expectedMessage);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(adapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -38,8 +40,8 @@ describe('required', function () {
       }
     };
     var rule = requiredValidator();
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.be.undefined;
+    var error = rule(adapter);
+    expect(error).to.be.undefined;
     done();
   });
 

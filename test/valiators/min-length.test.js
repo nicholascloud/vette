@@ -22,8 +22,9 @@ describe('minLength', function () {
       }
     };
     var rule = minLengthValidator(10);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(adapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -35,8 +36,9 @@ describe('minLength', function () {
       }
     };
     var rule = minLengthValidator(10, expectedMessage);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(adapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -47,8 +49,8 @@ describe('minLength', function () {
       }
     };
     var rule = minLengthValidator(10);
-    var actual = rule(adapter);
-    expect(actual).to.be.undefined;
+    var error = rule(adapter);
+    expect(error).to.be.undefined;
     done();
   });
 });
