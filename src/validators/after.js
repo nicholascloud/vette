@@ -1,7 +1,7 @@
 'use strict';
 var isNumber = require('../is-number');
 var compare = require('../compare');
-var ValidatorError = require('../errors').ValidatorError;
+var ValidationError = require('../errors').ValidationError;
 
 module.exports = function after (selector, inclusive, message) {
   selector = selector || '';
@@ -17,7 +17,7 @@ module.exports = function after (selector, inclusive, message) {
       return new TypeError('before value is not a date');
     }
     if (!compare(inclusive).gt(after, before)) {
-      return new ValidatorError(message);
+      return new ValidationError(message);
     }
   };
 };

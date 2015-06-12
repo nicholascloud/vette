@@ -1,6 +1,6 @@
 'use strict';
 var isNumber = require('../is-number');
-var ValidatorError = require('../errors').ValidatorError;
+var ValidationError = require('../errors').ValidationError;
 
 module.exports = function maxLength (length, message) {
   length = Number(length);
@@ -10,7 +10,7 @@ module.exports = function maxLength (length, message) {
   message = message || 'value has a maximum length of ' + length;
   return function (adapter) {
     if (adapter.value().length > length) {
-      return new ValidatorError(message);
+      return new ValidationError(message);
     }
   };
 };

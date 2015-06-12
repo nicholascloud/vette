@@ -1,11 +1,11 @@
 'use strict';
-var ValidatorError = require('../errors').ValidatorError;
+var ElementValidationError = require('../errors').ElementValidationError;
 
 module.exports = function each (rule, message) {
   return function (adapter) {
     var values = adapter.value();
     if (!Array.isArray(values)) {
-      values = [values];
+      return new TypeError('value is not an array');
     }
     var index = 0, maxIndex = values.length - 1;
     while (index <= maxIndex) {
@@ -17,8 +17,9 @@ module.exports = function each (rule, message) {
       var ruleError = rule(adapterFacade, adapter);
       if (ruleError) {
         if (message) {
-          return new ValidatorError(message);
+          return new ElementValidationError(index, message);
         }
+        ruleError.targetIndex = index;
         return ruleError;
       }
       index += 1;

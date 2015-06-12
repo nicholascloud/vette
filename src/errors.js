@@ -24,40 +24,60 @@ exports.MissingArgumentError = MissingArgumentError;
  * @constructor
  * @param {String} message
  */
-function ValidatorError(message) {
-  this.name = 'ValidatorError';
+function ValidationError(message) {
+  this.name = 'ValidationError';
   this.message = message || 'validation failed';
   this.stack = (new Error()).stack;
 }
-ValidatorError.prototype = Object.create(Error.prototype);
-ValidatorError.prototype.constructor = ValidatorError;
-ValidatorError.prototype.toString = function () {
+ValidationError.prototype = Object.create(Error.prototype);
+ValidationError.prototype.constructor = ValidationError;
+ValidationError.prototype.toString = function () {
   return this.message;
 };
 
-exports.ValidatorError = ValidatorError;
+exports.ValidationError = ValidationError;
 
 /**
  * Duplicate value error
  * @constructor
- * @param {Number} aIndex
- * @param {Number} bIndex
+ * @param {Number} targetIndex
+ * @param {Number} compareIndex
  * @param {String} message
  */
-function DuplicateValueError(aIndex, bIndex, message) {
-  this.name = 'DuplicateValueError';
+function DuplicateElementValidationError(targetIndex, compareIndex, message) {
+  this.name = 'DuplicateElementValidationError';
   this.message = message ||
-    ('value contains duplicates at indices: $1 and $2'
-        .replace('$1', aIndex)
-        .replace('$2', bIndex)
+    ('duplicates elements at indices: $1 and $2'
+        .replace('$1', targetIndex)
+        .replace('$2', compareIndex)
     );
   this.stack = (new Error()).stack;
-  this.aIndex = aIndex;
-  this.bIndex = bIndex;
+  this.targetIndex = targetIndex;
+  this.compareIndex = compareIndex;
 }
-DuplicateValueError.prototype = Object.create(Error.prototype);
-DuplicateValueError.prototype.constructor = DuplicateValueError;
-DuplicateValueError.prototype.toString = function () {
+DuplicateElementValidationError.prototype = Object.create(Error.prototype);
+DuplicateElementValidationError.prototype.constructor = DuplicateElementValidationError;
+DuplicateElementValidationError.prototype.toString = function () {
   return this.message;
 };
-exports.DuplicateValueError = DuplicateValueError;
+exports.DuplicateElementValidationError = DuplicateElementValidationError;
+
+/**
+ * Element error
+ * @param targetIndex
+ * @param message
+ * @constructor
+ */
+function ElementValidationError(targetIndex, message) {
+  this.name = 'ElementValidationError';
+  this.message = message ||
+    ('invalid element at targetIndex: $1'.replace('$1', targetIndex));
+  this.stack = (new Error()).stack;
+  this.targetIndex = targetIndex;
+}
+ElementValidationError.prototype = Object.create(Error.prototype);
+ElementValidationError.prototype.constructor = ElementValidationError;
+ElementValidationError.prototype.toString = function () {
+  return this.message;
+};
+exports.ElementValidationError = ElementValidationError;

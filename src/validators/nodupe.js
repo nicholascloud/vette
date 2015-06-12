@@ -1,6 +1,6 @@
 'use strict';
 var sameValueZero = require('../same-value-zero');
-var DuplicateValueError = require('../errors').DuplicateValueError;
+var DuplicateElementValidationError = require('../errors').DuplicateElementValidationError;
 
 module.exports = function nodupe (message) {
   return function (adapter) {
@@ -11,21 +11,25 @@ module.exports = function nodupe (message) {
     if (value.length === 0) {
       return;
     }
-    var aIndex = 0,
-      bIndex = 0,
+    var index = 0,
+      compareIndex = 0,
       maxIndex = value.length - 1;
 
-    while (aIndex <= maxIndex) {
-      bIndex = aIndex + 1;
-      while (bIndex <= maxIndex) {
-        var aValue = value[aIndex],
-          bValue = value[bIndex];
-        if (sameValueZero(aValue, bValue)) {
-          return new DuplicateValueError(aIndex, bIndex, message);
+    while (index <= maxIndex) {
+      compareIndex = index + 1;
+      while (compareIndex <= maxIndex) {
+        var a = value[index],
+          b = value[compareIndex];
+        if (sameValueZero(a, b)) {
+          return new DuplicateElementValidationError(
+            index,
+            compareIndex,
+            message
+          );
         }
-        bIndex += 1;
+        compareIndex += 1;
       }
-      aIndex += 1;
+      index += 1;
     }
   }
 };

@@ -24,36 +24,41 @@ describe('compose', function () {
   });
 
   it('should aggregate messages for failing rules', function (done) {
+    var e1 = new Error('rule1');
+    var e3 = new Error('rule3');
     var rule1 = function () {
-      return 'rule1';
+      return e1;
     };
     var rule2 = function () {};
     var rule3 = function () {
-      return 'rule3';
+      return e3;
     };
     var composedRule = composeValidator(rule1, rule2, rule3);
     var messages = composedRule(null, null);
     expect(messages).to.have.length(2);
-    expect(messages).to.deep.include.members(['rule1', 'rule3']);
+    expect(messages).to.deep.include.members([e1, e3]);
     done();
   });
 
   it('should aggregate messages for failing, nested composed rules', function (done) {
+    var e1 = new Error('rule1');
+    var e3 = new Error('rule3');
+    var e4 = new Error('rule4');
     var rule1 = function () {
-      return 'rule1';
+      return e1;
     };
     var rule2 = function () {};
     var rule3 = function () {
-      return 'rule3';
+      return e3;
     };
     var rule4 = function () {
-      return 'rule4'
+      return e4;
     };
     var nestedComposedRule = composeValidator(rule3, rule4);
     var composedRule = composeValidator(rule1, rule2, nestedComposedRule);
     var messages = composedRule(null, null);
     expect(messages).to.have.length(3);
-    expect(messages).to.deep.include.members(['rule1', 'rule3', 'rule4']);
+    expect(messages).to.deep.include.members([e1, e3, e4]);
     done();
   });
 

@@ -1,16 +1,16 @@
 'use strict';
 var contains = require('../contains');
-var ValidatorError = require('../errors').ValidatorError;
+var ValidationError = require('../errors').ValidationError;
 
 module.exports = function any (options, message) {
   message = message || 'value is not a valid choice';
   options = options || [];
   return function (adapter) {
     if (options.length === 0) {
-      return new ValidatorError(message);
+      return new ValidationError(message);
     }
     if (!contains(options, adapter.value())) {
-      return new ValidatorError(message);
+      return new ValidationError(message);
     }
   };
 };

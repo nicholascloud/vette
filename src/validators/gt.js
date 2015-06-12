@@ -1,7 +1,7 @@
 'use strict';
 var isNumber = require('../is-number');
 var compare = require('../compare');
-var ValidatorError = require('../errors').ValidatorError;
+var ValidationError = require('../errors').ValidationError;
 
 module.exports = function gt (number, inclusive, message) {
   number = Number(number);
@@ -16,7 +16,7 @@ module.exports = function gt (number, inclusive, message) {
       return new TypeError('value must be numeric');
     }
     if (!compare(inclusive).gt(value, number)) {
-      return new ValidatorError(message);
+      return new ValidationError(message);
     }
   };
 };

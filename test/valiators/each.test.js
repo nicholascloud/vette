@@ -66,7 +66,7 @@ describe('each', function () {
     };
     var eachRule = function (adapter) {
       if (adapter.value() >= 3) {
-        return 'fail';
+        return new Error('fail');
       }
       actualCount += 1;
     };
@@ -76,19 +76,17 @@ describe('each', function () {
     done();
   });
 
-  it('applies rule to a primitive value, as if it were an array', function (done) {
+  it('returns an error if value is not an array', function (done) {
     var adapter = {
       value: function () {
         return 1;
       },
       find: function () {}
     };
-    var eachRule = function (adapter) {
-      var actual = adapter.value();
-      expect(actual).to.equal(1);
-      done();
-    };
+    var eachRule = function (adapter) {};
     var rule = eachValidator(eachRule);
-    rule(adapter);
+    var error = rule(adapter);
+    expect(error).to.be.instanceOf(Error);
+    done();
   });
 });
