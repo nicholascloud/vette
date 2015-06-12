@@ -49,20 +49,29 @@ describe('precondition', function () {
     done();
   });
 
-  it('will return violations for any failing rules', function (done) {
-    var expectedMessage1 = 'expected message 1';
-    var expectedMessage2 = 'expected message 2';
+  it('will return a violation for a single failing rule', function (done) {
+    var e1 = new Error('expected message 1');
     var rule = preconditionValidator(
       function () { return true; },
-      function () { return expectedMessage1; },
-      function () { return expectedMessage2; }
+      function () { return e1; }
     );
-    var actualMessages = rule(mockAdapter);
-    expect(actualMessages).to.be.an.array;
-    expect(actualMessages).to.have.members([
-      expectedMessage1,
-      expectedMessage2
-    ]);
+    var error = rule(mockAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error).to.equal(e1);
+    done();
+  });
+
+  it('will return an array of violations for all failing rules', function (done) {
+    var e1 = new Error('expected message 1');
+    var e2 = new Error('expected message 2');
+    var rule = preconditionValidator(
+      function () { return true; },
+      function () { return e1; },
+      function () { return e2; }
+    );
+    var errors = rule(mockAdapter);
+    expect(errors).to.be.an.array;
+    expect(errors).to.have.members([e1, e2]);
     done();
   });
 
@@ -72,8 +81,8 @@ describe('precondition', function () {
       function () {},
       function () {}
     );
-    var actual = rule(mockAdapter);
-    expect(actual).to.be.undefined;
+    var error = rule(mockAdapter);
+    expect(error).to.be.undefined;
     done();
   });
 
