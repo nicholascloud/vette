@@ -30,8 +30,9 @@ describe('range', function () {
       }
     };
     var rule = rangeValidator(5, 10);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(adapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -43,8 +44,9 @@ describe('range', function () {
       }
     };
     var rule = rangeValidator(5, 10, null, expectedMessage);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(adapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -55,8 +57,8 @@ describe('range', function () {
       }
     };
     var rule = rangeValidator(5, 10);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.not.be.undefined;
+    var error = rule(adapter);
+    expect(error).to.not.be.undefined;
     done();
   });
 
@@ -67,8 +69,8 @@ describe('range', function () {
       }
     };
     var rule = rangeValidator(5, 10);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.not.be.undefined;
+    var error = rule(adapter);
+    expect(error).to.not.be.undefined;
     done();
   });
 
@@ -79,8 +81,8 @@ describe('range', function () {
       }
     };
     var rule = rangeValidator(5, 10);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.not.be.undefined;
+    var error = rule(adapter);
+    expect(error).to.not.be.undefined;
     done();
   });
 
@@ -91,8 +93,8 @@ describe('range', function () {
       }
     };
     var rule = rangeValidator(5, 10);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.not.be.undefined;
+    var error = rule(adapter);
+    expect(error).to.not.be.undefined;
     done();
   });
 
@@ -103,8 +105,8 @@ describe('range', function () {
       }
     };
     var rule = rangeValidator(5, 10);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.be.undefined;
+    var error = rule(adapter);
+    expect(error).to.be.undefined;
     done();
   });
 
@@ -115,8 +117,8 @@ describe('range', function () {
       }
     };
     var rule = rangeValidator(5, 10, true);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.be.undefined;
+    var error = rule(adapter);
+    expect(error).to.be.undefined;
     done();
   });
 
@@ -127,8 +129,8 @@ describe('range', function () {
       }
     };
     var rule = rangeValidator(5, 10, true);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.be.undefined;
+    var error = rule(adapter);
+    expect(error).to.be.undefined;
     done();
   });
 
@@ -139,8 +141,8 @@ describe('range', function () {
       }
     };
     var rule = rangeValidator(5, 10, true);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.be.undefined;
+    var error = rule(adapter);
+    expect(error).to.be.undefined;
     done();
   });
 });

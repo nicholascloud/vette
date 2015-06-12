@@ -2,6 +2,7 @@
 var isNumber = require('../is-number');
 var isNumeric = require('../is-numeric');
 var compare = require('../compare');
+var ValidatorError = require('../errors').ValidatorError;
 
 module.exports = function range (lower, upper, inclusive, message) {
   // lower MAY NOT be a string
@@ -18,10 +19,10 @@ module.exports = function range (lower, upper, inclusive, message) {
     // value MAY be a string
     var value = adapter.value();
     if (!isNumeric(value)) {
-      return 'value is not numeric';
+      return new TypeError('value is not numeric');
     }
     if (!compare(inclusive).btw(Number(value), lower, upper)) {
-      return message;
+      return new ValidatorError(message);
     }
   };
 };
