@@ -14,8 +14,9 @@ describe('any', function () {
     var options = ['bar'];
     var adapter = hashAdapter(obj.foo);
     var rule = anyValidator(options);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(adapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -27,8 +28,9 @@ describe('any', function () {
     var options = ['bar'];
     var adapter = hashAdapter(obj.foo);
     var rule = anyValidator(options, expectedMessage);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(adapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -40,8 +42,9 @@ describe('any', function () {
     var options = [];
     var adapter = hashAdapter(obj.foo);
     var rule = anyValidator(options);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(adapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -53,8 +56,9 @@ describe('any', function () {
     var options = null;
     var adapter = hashAdapter(obj.foo);
     var rule = anyValidator(options);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(adapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -66,8 +70,9 @@ describe('any', function () {
     var options = ['bar'];
     var adapter = hashAdapter(obj.foo);
     var rule = anyValidator(options);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(adapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -78,8 +83,8 @@ describe('any', function () {
     var options = ['foo', 'bar'];
     var adapter = hashAdapter(obj.foo);
     var rule = anyValidator(options);
-    var actualMessage = rule(adapter);
-    expect(actualMessage).to.be.undefined;
+    var error = rule(adapter);
+    expect(error).to.be.undefined;
     done();
   });
 });
