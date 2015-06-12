@@ -14,8 +14,9 @@ describe('email', function () {
     var rootAdapter = hashAdapter(obj);
     var emailAdapter = rootAdapter.find('email');
     var rule = emailValidator();
-    var actualMessage = rule(emailAdapter, rootAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(emailAdapter, rootAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -27,8 +28,9 @@ describe('email', function () {
     var rootAdapter = hashAdapter(obj);
     var emailAdapter = rootAdapter.find('email');
     var rule = emailValidator(expectedMessage);
-    var actualMessage = rule(emailAdapter, rootAdapter);
-    expect(actualMessage).to.equal(expectedMessage);
+    var error = rule(emailAdapter, rootAdapter);
+    expect(error).to.be.instanceOf(Error);
+    expect(error.message).to.equal(expectedMessage);
     done();
   });
 
@@ -39,8 +41,8 @@ describe('email', function () {
     var rootAdapter = hashAdapter(obj);
     var emailAdapter = rootAdapter.find('email');
     var rule = emailValidator();
-    var actualMessage = rule(emailAdapter, rootAdapter);
-    expect(actualMessage).to.be.undefined;
+    var error = rule(emailAdapter, rootAdapter);
+    expect(error).to.be.undefined;
     done();
   });
 });
