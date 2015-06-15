@@ -50,9 +50,10 @@ var vette = {
     return keys(this.rules);
   },
 
-  _evaluate: function (adapter, deferred) {
+  _evaluate: function (adapter, selectors, deferred) {
     this.emit('evaluating', this.selectors());
     var self = this;
+
     /*
      * violations = {
      *   '[name=fullName]': ['field is required'], //1 violation
@@ -61,7 +62,16 @@ var vette = {
      */
     var violations = {};
 
-    each(this.rules, function (rules, selector) {
+    /*
+     * If no specific selectors were supplied, run rules for
+     * all selectors.
+     */
+    if (selectors.length === 0) {
+      selectors = keys(this.rules);
+    }
+
+    each(selectors, function (selector) {
+      var rules = self.rules[selector];
       violations[selector] = [];
 
       each(rules, function (rule) {
@@ -94,11 +104,12 @@ var vette = {
     this.emit('evaluated');
   },
 
-  evaluate: function (target) {
+  evaluate: function (target /*, ...selectors*/) {
     var self = this;
+    var selectors = Array.prototype.slice.call(arguments, 1);
     var deferred = Q.defer();
     setTimeout(function () {
-      self._evaluate(self.adapter(target), deferred);
+      self._evaluate(self.adapter(target), selectors, deferred);
     }, 0);
     return deferred.promise;
   }

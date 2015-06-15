@@ -39,7 +39,7 @@ describe('index#evaluate()', function () {
     function fakeRule(name) {
       return function () {
         executed.push(name);
-        return 'error';
+        return new Error('error');
       };
     }
 
@@ -58,6 +58,60 @@ describe('index#evaluate()', function () {
     evaluation.fail(function () {
       expect(executed).to.have.length(2);
       expect(executed).to.have.members(['fakeRule1', 'fakeRule2']);
+      done();
+    });
+  });
+
+  it('only all tests by default', function (done) {
+    var executed = [];
+    function fakeRule(name) {
+      return function () {
+        executed.push(name);
+      };
+    }
+
+    var vette = new Vette();
+    vette.add('foo', fakeRule('foo'));
+    vette.add('bar', fakeRule('bar'));
+    vette.add('baz', fakeRule('baz'));
+
+    var obj = {
+      foo: 'foo',
+      bar: 'bar',
+      baz: 'baz'
+    };
+
+    var evaluation = vette.evaluate(obj);
+    evaluation.done(function () {
+      expect(executed).to.have.length(3);
+      expect(executed).to.have.members(['foo', 'bar', 'baz']);
+      done();
+    });
+  });
+
+  it('only runs tests for selectors that are specified', function (done) {
+    var executed = [];
+    function fakeRule(name) {
+      return function () {
+        executed.push(name);
+      };
+    }
+
+    var vette = new Vette();
+    vette.add('foo', fakeRule('foo'));
+    vette.add('bar', fakeRule('bar'));
+    vette.add('baz', fakeRule('baz'));
+
+    var obj = {
+      foo: 'foo',
+      bar: 'bar',
+      baz: 'baz'
+    };
+
+    var evaluation = vette.evaluate(obj, 'foo', 'baz');
+    evaluation.done(function () {
+      expect(executed).to.have.length(2);
+      expect(executed).to.have.members(['foo', 'baz']);
       done();
     });
   });
