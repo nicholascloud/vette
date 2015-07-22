@@ -41,20 +41,19 @@ Given the following example form...
 Add validation rules to an instance of Vette.
 
 ```javascript
-define(['vette'], function (Vette) {
+'use strict';
+var Vette = require('vette');
 
-  var ruleset = new Vette('jquery');
-  ruleset.add('[name=email]', Vette.required());
-  ruleset.add('[name=password]', Vette.minLength(10));
-  ruleset.add('[name=password]', Vette.same('[name=verify-password']));
+var ruleset = new Vette('jquery');
+ruleset.add('[name=email]', Vette.required());
+ruleset.add('[name=password]', Vette.minLength(10));
+ruleset.add('[name=password]', Vette.same('[name=verify-password']));
 
-  // or
+// or
 
-  // ruleset.add('[name=password]',
-  //   Vette.minLength(10),
-  //   Vette.same('[name=verify-password']));
-
-});
+// ruleset.add('[name=password]',
+//   Vette.minLength(10),
+//   Vette.same('[name=verify-password']));
 ```
 
 Invoke validation when the user performs an action, like submitting a form.
