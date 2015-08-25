@@ -104,4 +104,35 @@ describe('precondition', function () {
     done();
   });
 
+  it('will execute rules if the predicate is a non-function, truthy value', function (done) {
+    var truthy = [true, 'true', 1, [], {}];
+    while (truthy.length) {
+      var preconditionPassed = false;
+      var rule = preconditionValidator(
+        truthy.shift(),
+        function () {
+          preconditionPassed = true;
+        }
+      );
+      rule(mockAdapter);
+      expect(preconditionPassed).to.be.true;
+    }
+    done();
+  });
+
+  it('will not execute rules if the predicate is a non-function, falsy value', function (done) {
+    var falsy = [false, '', 0, null, undefined];
+    while (falsy.length) {
+      var preconditionPassed = false;
+      var rule = preconditionValidator(
+        falsy.shift(),
+        function () {
+          preconditionPassed = true;
+        }
+      );
+      rule(mockAdapter);
+      expect(preconditionPassed).to.be.false;
+    }
+    done();
+  });
 });

@@ -167,9 +167,20 @@ ruleset.add('[name=level]', Vette.accessor(
 ));
 ```
 
-Determine if a rule should even be evaluated by using a precondition.
+Determine if a rule should even be evaluated by using a precondition. Preconditions may be truthy values or functions that return truthy values.
 
 ```javascript
+// using a primitive
+
+var isNotEmpty = true;
+
+ruleset.add('[name=middleName]', Vette.precondition(
+  isNotEmpty,
+  Vette.minLength(2) //only executes if isNotEmpty() returns true
+));
+
+// using a function
+
 function isNotEmpty(value) {
   return !!value;
 }
