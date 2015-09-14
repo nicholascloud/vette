@@ -83,7 +83,7 @@ describe('each', function () {
       },
       find: function () {}
     };
-    var eachRule = function (adapter) {};
+    var eachRule = function () {};
     var rule = eachValidator(eachRule);
     var error = rule(adapter);
     expect(error).to.be.instanceOf(Error);

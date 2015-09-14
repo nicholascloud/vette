@@ -10,6 +10,10 @@ module.exports = {
 
   // collection validators
   nodupe: require('./nodupe'),
+  hasOne: require('./has-one'),
+  hasAny: require('./has-any'),
+  hasAll: require('./has-all'),
+  hasNone: require('./has-none'),
 
   // boolean validators
   bool: require('./bool'),

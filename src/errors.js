@@ -38,7 +38,7 @@ ValidationError.prototype.toString = function () {
 exports.ValidationError = ValidationError;
 
 /**
- * Duplicate value error
+ * Duplicate element error
  * @constructor
  * @param {Number} targetIndex
  * @param {Number} compareIndex
@@ -81,3 +81,30 @@ ElementValidationError.prototype.toString = function () {
   return this.message;
 };
 exports.ElementValidationError = ElementValidationError;
+
+/**
+ * Multiple element error
+ * @constructor
+ * @param {Number} expectedCount
+ * @param {Number} actualCount
+ * @param {Array.<Number>} matchIndices
+ * @param {String} message
+ */
+function MultipleElementValidationError(expectedCount, actualCount, matchIndices, message) {
+  this.name = 'MultipleElementValidationError';
+  this.message = message ||
+    ('expected $1 element(s) but found $2'
+        .replace('$1', expectedCount)
+        .replace('$2', actualCount)
+    );
+  this.stack = (new Error()).stack;
+  this.expectedCount = expectedCount;
+  this.actualCount = actualCount;
+  this.matchIndices = matchIndices;
+}
+MultipleElementValidationError.prototype = Object.create(Error.prototype);
+MultipleElementValidationError.prototype.constructor = MultipleElementValidationError;
+MultipleElementValidationError.prototype.toString = function () {
+  return this.message;
+};
+exports.MultipleElementValidationError = MultipleElementValidationError;

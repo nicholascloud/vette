@@ -61,7 +61,7 @@ describe('index', function () {
     });
   });
 
-  describe('email validators', function (done) {
+  describe('email validators', function () {
     it('should have email validator', function (done) {
       expect(index.email).to.be.a.function;
       done();

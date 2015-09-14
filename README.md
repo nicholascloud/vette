@@ -1,4 +1,4 @@
-# Vette 2.x
+# Vette 3.x
 
 *NOTE* Version 1.x was built with RequireJS. This is no longer the case. Vette 2.x+ will only support CommonJS loaders like Browserify.
 
@@ -144,6 +144,10 @@ Profit!
 #### Collection rules
 
 - `nodupe()`: no duplicate values may be present in an array value
+- `hasAll()`: every element in the collection passes a specified predicate
+- `hasAny()`: any element in a collection passes a specified predicate
+- `hasNone()`: no elements in a collection pass a specified predicate
+- `hasOne()`: one, and only one, element in a collection passes a specified predicate
 
 #### Date rules
 

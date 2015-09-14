@@ -8,7 +8,7 @@ function jqueryAdapter ($el) {
     value: function () {
       return $el.val();
     }
-  }
+  };
 }
 
 module.exports = jqueryAdapter;

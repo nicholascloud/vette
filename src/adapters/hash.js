@@ -8,7 +8,7 @@ function hashAdapter (object) {
     value: function () {
       return object;
     }
-  }
+  };
 }
 
 module.exports = hashAdapter;

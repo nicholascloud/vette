@@ -1,7 +1,6 @@
 'use strict';
 var expect = require('chai').expect;
 
-var hashAdapter = require('../../src/adapters').hash;
 var rangeValidator = require('../../src/validators').range;
 
 describe('range', function () {

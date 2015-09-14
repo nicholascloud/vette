@@ -111,7 +111,6 @@ describe('any', function () {
   });
 
   it('returns undefined if value found in options provided by a function', function (done) {
-    var expectedMessage = 'value is not a valid choice';
     var options = function () {
       return ['bar'];
     };

@@ -36,7 +36,7 @@ describe('accessor', function () {
       expect(actualValue).to.equal(expectedValue);
       done();
     }
-    var rule = accessorValidator(getValue, rule);
-    rule(hashAdapter(obj));
+    var accessorRule = accessorValidator(getValue, rule);
+    accessorRule(hashAdapter(obj));
   });
 });

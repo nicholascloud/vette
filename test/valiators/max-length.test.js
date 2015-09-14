@@ -1,7 +1,6 @@
 'use strict';
 var expect = require('chai').expect;
 
-var hashAdapter = require('../../src/adapters').hash;
 var maxLengthValidator = require('../../src/validators').maxLength;
 
 describe('maxLength', function () {

@@ -31,5 +31,5 @@ module.exports = function nodupe (message) {
       }
       index += 1;
     }
-  }
+  };
 };

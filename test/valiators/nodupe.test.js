@@ -1,7 +1,6 @@
 'use strict';
 var expect = require('chai').expect;
 
-var hashAdapter = require('../../src/adapters').hash;
 var nodupeValidator = require('../../src/validators').nodupe;
 
 describe('nodupe', function () {

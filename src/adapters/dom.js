@@ -8,7 +8,7 @@ function domAdapter (el) {
     value: function () {
       return el.value;
     }
-  }
+  };
 }
 
 module.exports = domAdapter;

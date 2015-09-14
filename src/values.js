@@ -6,11 +6,11 @@
  * @returns {Array}
  */
 module.exports = function values (object) {
-  var values = [];
+  var collectedValues = [];
   for (var key in object) {
     if (object.hasOwnProperty(key)) {
-      values.push(object[key]);
+      collectedValues.push(object[key]);
     }
   }
-  return values;
+  return collectedValues;
 };

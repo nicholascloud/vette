@@ -1,4 +1,5 @@
 'use strict';
+var noop = require('../noop');
 var _each = require('../each');
 var ElementValidationError = require('../errors').ElementValidationError;
 
@@ -22,11 +23,14 @@ module.exports = function each (rule, message) {
       return new TypeError('value is not an array');
     }
     var index = 0, maxIndex = values.length - 1;
+    function getValue(value) {
+      return value;
+    }
     while (index <= maxIndex) {
       var value = values[index];
       var adapterFacade = {
-        value: function () { return value; },
-        find: function () {}
+        value: getValue.bind(null, value),
+        find: noop
       };
       var ruleError = rule(adapterFacade, adapter);
       if (ruleError) {

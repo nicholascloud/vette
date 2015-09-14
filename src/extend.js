@@ -15,11 +15,13 @@ module.exports = function extend (targets) {
     return {};
   }
   var rootTarget = targets.shift();
-  while (targets.length) {
-    var nextTarget = targets.shift();
+  function copy(nextTarget) {
     each(keys(nextTarget), function (key) {
       rootTarget[key] = nextTarget[key];
     });
+  }
+  while (targets.length) {
+    copy(targets.shift());
   }
   return rootTarget;
 };

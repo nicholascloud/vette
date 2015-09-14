@@ -1,3 +1,4 @@
+/*jshint curly:false*/
 'use strict';
 
 /**

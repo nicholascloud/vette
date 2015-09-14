@@ -106,15 +106,17 @@ describe('precondition', function () {
 
   it('will execute rules if the predicate is a non-function, truthy value', function (done) {
     var truthy = [true, 'true', 1, [], {}];
+    var preconditionPassed;
+    function rule () {
+      preconditionPassed = true;
+    }
     while (truthy.length) {
-      var preconditionPassed = false;
-      var rule = preconditionValidator(
+      preconditionPassed = false;
+      var preconditionRule = preconditionValidator(
         truthy.shift(),
-        function () {
-          preconditionPassed = true;
-        }
+        rule
       );
-      rule(mockAdapter);
+      preconditionRule(mockAdapter);
       expect(preconditionPassed).to.be.true;
     }
     done();
@@ -122,15 +124,17 @@ describe('precondition', function () {
 
   it('will not execute rules if the predicate is a non-function, falsy value', function (done) {
     var falsy = [false, '', 0, null, undefined];
+    var preconditionPassed;
+    function rule () {
+      preconditionPassed = true;
+    }
     while (falsy.length) {
-      var preconditionPassed = false;
-      var rule = preconditionValidator(
+      preconditionPassed = false;
+      var preconditionRule = preconditionValidator(
         falsy.shift(),
-        function () {
-          preconditionPassed = true;
-        }
+        rule
       );
-      rule(mockAdapter);
+      preconditionRule(mockAdapter);
       expect(preconditionPassed).to.be.false;
     }
     done();
