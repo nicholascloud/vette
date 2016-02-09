@@ -5,6 +5,11 @@ var isFunction = require('../src/is-function');
 
 describe('is-function', function () {
 
+  it('returns false for value date', function (done) {
+    expect(isFunction(new Date())).to.be.false;
+    done();
+  });
+
   it('returns false for objects', function (done) {
     expect(isFunction({})).to.be.false;
     done();

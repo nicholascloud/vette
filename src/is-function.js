@@ -1,5 +1,5 @@
 'use strict';
-var FUNCTION_CLASS = '[object Function]';
+var FUNCTION_SYMBOL = '[object Function]';
 
 /**
  * Is target a function?
@@ -7,5 +7,5 @@ var FUNCTION_CLASS = '[object Function]';
  * @returns {Boolean}
  */
 module.exports = function isFunction (target) {
-  return Object.prototype.toString.call(target) === FUNCTION_CLASS;
+  return Object.prototype.toString.call(target) === FUNCTION_SYMBOL;
 };

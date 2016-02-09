@@ -6,6 +6,9 @@
  * @returns {Array}
  */
 module.exports = function keys (object) {
+  if (Object.keys) {
+    return Object.keys(object);
+  }
   var ownKeys = [];
   for (var key in object) {
     if (object.hasOwnProperty(key)) {

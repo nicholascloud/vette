@@ -5,6 +5,11 @@ var isNumber = require('../src/is-number');
 
 describe('isNumber', function () {
 
+  it('returns false for value date', function (done) {
+    expect(isNumber(new Date())).to.be.false;
+    done();
+  });
+
   it('returns false for value null', function (done) {
     expect(isNumber(null)).to.be.false;
     done();

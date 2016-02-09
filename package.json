@@ -1,6 +1,6 @@
 {
   "name": "vette",
-  "version": "3.6.0",
+  "version": "3.7.0",
   "description": "validation",
   "main": "src/index.js",
   "directories": {
@@ -15,7 +15,7 @@
     "mocha": "^2.2.5"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/_mocha --recursive --ui bdd ./test"
+    "test": "bash ./jshint.sh && ./node_modules/mocha/bin/_mocha --recursive --ui bdd ./test"
   },
   "repository": {
     "type": "git",

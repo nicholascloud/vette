@@ -1,16 +1,18 @@
 'use strict';
-var NULL_CLASS = '[object Null]';
-var UNDEFINED_CLASS = '[object Undefined]';
+var isNull = require('./is-null');
+var isUndefined = require('./is-undefined');
+var isNumber = require('./is-number');
+
 var NUM_REGEX = /^[-]?[0-9]+$/;
 
-function is(target, typeClass) {
-  return Object.prototype.toString.call(target) === typeClass;
-}
-
 module.exports = function isNumeric (target) {
-  return !is(target, NULL_CLASS) &&
-      !is(target, UNDEFINED_CLASS) &&
-      target.toString()
-        .trim()
-        .search(NUM_REGEX) > -1;
+  if(isNull(target)) {
+    return false;
+  }
+  if(isUndefined(target)) {
+    return false;
+  }
+  return isNumber(target) || target.toString()
+    .trim()
+    .search(NUM_REGEX) > -1;
 };
